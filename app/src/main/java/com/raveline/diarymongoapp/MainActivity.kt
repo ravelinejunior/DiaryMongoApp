@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
                 navController = navController
             )
 
-            SplashScreen()
         }
 
     }
