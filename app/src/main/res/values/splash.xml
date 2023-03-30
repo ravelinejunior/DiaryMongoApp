@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.DiaryMongoApp.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FBFCFF</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo
+        </item>
+        <item name="postSplashScreenTheme">@style/Theme.DiaryMongoApp</item>
+    </style>
+</resources>
