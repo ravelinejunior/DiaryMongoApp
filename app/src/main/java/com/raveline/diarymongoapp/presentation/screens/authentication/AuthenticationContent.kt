@@ -58,9 +58,10 @@ fun AuthenticationContent(
                 modifier = Modifier.weight(weight = 2f),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                GoogleButton() {
-
-                }
+                GoogleButton(
+                    onClick = onButtonClicked,
+                    loadingState = loadingState
+                )
             }
         }
     }
