@@ -1,6 +1,8 @@
 package com.raveline.diarymongoapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -10,6 +12,7 @@ import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
+import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 
@@ -30,16 +33,41 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
 fun NavGraphBuilder.authenticationRoute() {
     composable(route = Screens.Authentication.route) {
 
+        val authViewModel = viewModel<AuthenticationViewModel>()
+        val loadingState by authViewModel.loadingState
+
         val oneTapState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
 
         AuthenticationScreen(
-            loadingState = oneTapState.opened,
+            loadingState = loadingState,
             onButtonClicked = {
                 oneTapState.open()
+                authViewModel.setLoading(loading = true)
             },
             oneTapSignInState = oneTapState,
-            messageBarState = messageBarState
+            messageBarState = messageBarState,
+            onTokenIdReceived = { tokenId ->
+
+                //Authenticating user and verify if its all good.
+                authViewModel.signInWithMongoAtlas(
+                    tokenId = tokenId,
+                    onSuccess = { isLoggedIn ->
+                        if (isLoggedIn) {
+                            messageBarState.addSuccess("Successfully Authenticated!")
+                            authViewModel.setLoading(loading = false)
+                        }
+
+                    },
+                    onError = { error ->
+                        messageBarState.addError(Exception(error))
+                        authViewModel.setLoading(loading = false)
+                    }
+                )
+            },
+            onDialogDismiss = { message ->
+                messageBarState.addError(Exception(message))
+            }
         )
     }
 }

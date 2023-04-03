@@ -1,6 +1,7 @@
 package com.raveline.diarymongoapp.common.utlis
 
 object Constants{
+
     // Mongo
     const val MONGO_API_KEY = "ravelinediary-dmsmx"
     const val MONGO_SERVER_CLIENT_ID = "738821409973-omo4i05dqlukuiiaing162ef2kfmbk0a.apps.googleusercontent.com"

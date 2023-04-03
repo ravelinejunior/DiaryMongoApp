@@ -17,10 +17,12 @@ fun AuthenticationScreen(
     onButtonClicked: () -> Unit,
     oneTapSignInState: OneTapSignInState,
     messageBarState: MessageBarState,
+    onTokenIdReceived: (String) -> Unit,
+    onDialogDismiss: (String) -> Unit
 ) {
 
     Scaffold(content = {
-        ContentWithMessageBar(messageBarState = messageBarState) {
+        ContentWithMessageBar(messageBarState = messageBarState, errorMaxLines = 3) {
             AuthenticationContent(
                 loadingState = loadingState,
                 onButtonClicked = onButtonClicked
@@ -32,12 +34,14 @@ fun AuthenticationScreen(
         state = oneTapSignInState,
         clientId = Constants.MONGO_SERVER_CLIENT_ID,
         onTokenIdReceived = { tokenId ->
-            Log.i("AuthenticationScreen", "TokenId = $tokenId")
+            onTokenIdReceived(tokenId)
             messageBarState.addSuccess("Successfully signed in!")
+            Log.i("AuthenticationScreen", "TokenId = $tokenId")
         },
         onDialogDismissed = { message ->
-            Log.i("AuthenticationScreen", "Message = $message")
+            onDialogDismiss(message)
             messageBarState.addError(Exception(message))
+            Log.e("AuthenticationScreen", "Message = $message")
         }
     )
 
