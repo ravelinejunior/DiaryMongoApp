@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.raveline.diarymongoapp.common.utlis.Constants
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -30,10 +29,13 @@ class AuthenticationViewModel : ViewModel() {
             try {
                 val result = withContext(Dispatchers.IO) {
                     App.create(Constants.MONGO_API_KEY)
-                        .login(Credentials.google(token = tokenId, GoogleAuthType.ID_TOKEN))
+                        .login(
+                            Credentials.jwt(tokenId)
+                            //Credentials.google(token = tokenId, GoogleAuthType.ID_TOKEN)
+                        )
                         .loggedIn
                 }
-                withContext(Main){
+                withContext(Main) {
                     onSuccess(result)
                 }
 
