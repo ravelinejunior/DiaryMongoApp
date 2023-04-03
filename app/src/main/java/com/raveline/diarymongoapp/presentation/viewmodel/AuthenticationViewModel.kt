@@ -8,10 +8,14 @@ import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AuthenticationViewModel : ViewModel() {
+
+    var authenticated = mutableStateOf(false)
+    private set
 
     var loadingState = mutableStateOf(false)
         private set
@@ -23,7 +27,8 @@ class AuthenticationViewModel : ViewModel() {
     fun signInWithMongoAtlas(
         tokenId: String,
         onSuccess: (Boolean) -> Unit,
-        onError: (Exception) -> Unit
+        onError: (Exception) -> Unit,
+
     ) {
         viewModelScope.launch {
             try {
@@ -37,6 +42,8 @@ class AuthenticationViewModel : ViewModel() {
                 }
                 withContext(Main) {
                     onSuccess(result)
+                    delay(600)
+                    authenticated.value = true
                 }
 
             } catch (e: Exception) {

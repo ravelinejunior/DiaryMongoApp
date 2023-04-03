@@ -10,6 +10,7 @@ object Constants{
     const val WRITE_SCREEN_ARGUMENT_ID = "diaryId"
     const val AUTHENTICATION_SCREEN = "authenticationScreen"
     const val HOME_SCREEN = "homeScreen"
+    const val HOME_SPLASH_SCREEN = "homeSplashScreen"
     const val WRITE_SCREEN = "writeScreen"
 
 }

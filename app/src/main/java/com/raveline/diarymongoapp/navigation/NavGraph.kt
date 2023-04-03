@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
+import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
@@ -23,23 +24,32 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
         startDestination = startDestination,
         navController = navController,
     ) {
-        authenticationRoute()
+        authenticationRoute(
+            navigateToHome = {
+                navController.navigate(Screens.HomeSplash.route)
+            }
+        )
+        homeSplashRoute(navController = navController)
         homeRoute()
         writeRoute()
     }
 
 }
 
-fun NavGraphBuilder.authenticationRoute() {
+fun NavGraphBuilder.authenticationRoute(
+    navigateToHome: () -> Unit,
+) {
     composable(route = Screens.Authentication.route) {
 
         val authViewModel = viewModel<AuthenticationViewModel>()
         val loadingState by authViewModel.loadingState
+        val authenticated by authViewModel.authenticated
 
         val oneTapState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
 
         AuthenticationScreen(
+            authenticated = authenticated,
             loadingState = loadingState,
             onButtonClicked = {
                 oneTapState.open()
@@ -67,8 +77,15 @@ fun NavGraphBuilder.authenticationRoute() {
             },
             onDialogDismiss = { message ->
                 messageBarState.addError(Exception(message))
-            }
+            },
+            navigateToHome = navigateToHome,
         )
+    }
+}
+
+fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
+    composable(route = Screens.HomeSplash.route) {
+        HomeSplashScreen(navController = navController)
     }
 }
 
