@@ -1,8 +1,10 @@
 package com.raveline.diarymongoapp.navigation
 
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -10,14 +12,21 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.navigation.screens.Screens
+import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
+import io.realm.kotlin.mongodb.App
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SetupNavGraph(startDestination: String, navController: NavHostController) {
@@ -35,6 +44,10 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
         homeRoute(
             navigateToWrite = {
                 navController.navigate(Screens.Write.route)
+            },
+            navigateToAuth = {
+                navController.popBackStack()
+                navController.navigate(Screens.Authentication.route)
             }
         )
         writeRoute()
@@ -95,12 +108,46 @@ fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.homeRoute(
-    navigateToWrite: () -> Unit
+    navigateToWrite: () -> Unit,
+    navigateToAuth: () -> Unit
 ) {
     composable(route = Screens.Home.route) {
+
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        var signOutDialogOpened: Boolean by remember {
+            mutableStateOf(false)
+        }
+        val scope = rememberCoroutineScope()
+
         HomeScreen(
-            onMenuClicked = {},
+            drawerState = drawerState,
+            onMenuClicked = {
+                scope.launch {
+                    drawerState.open()
+                }
+            },
+            onSignOutClicked = {
+                signOutDialogOpened = true
+            },
             navigateToWrite = navigateToWrite,
+        )
+
+        // Sign out dialog
+        DisplayAlertDialog(
+            title = stringResource(id = R.string.sign_out_str),
+            message = stringResource(id = R.string.sign_out_alert_message),
+            dialogOpened = signOutDialogOpened,
+            onDialogClosed = {
+                signOutDialogOpened = false
+            },
+            onYesClicked = {
+                scope.launch(IO) {
+                    App.create(Constants.MONGO_API_KEY).currentUser?.logOut()
+                    withContext(Main){
+                        navigateToAuth()
+                    }
+                }
+            }
         )
     }
 }

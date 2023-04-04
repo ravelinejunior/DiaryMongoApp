@@ -6,4 +6,6 @@
     <string name="hamburger_menu_msg">Hamburger Menu Icon</string>
     <string name="date_icon_msg">Date Icon</string>
     <string name="new_diary_icon_content_msg">New Diary Icon</string>
+    <string name="sign_out_str">Sign Out</string>
+    <string name="sign_out_alert_message">Are you sure you want to Sign Out from your Google Account?</string>
 </resources>
