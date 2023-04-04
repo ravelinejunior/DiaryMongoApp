@@ -1,5 +1,6 @@
 package com.raveline.diarymongoapp.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,6 +13,7 @@ import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
+import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -30,12 +32,17 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
             }
         )
         homeSplashRoute(navController = navController)
-        homeRoute()
+        homeRoute(
+            navigateToWrite = {
+                navController.navigate(Screens.Write.route)
+            }
+        )
         writeRoute()
     }
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.authenticationRoute(
     navigateToHome: () -> Unit,
 ) {
@@ -87,9 +94,14 @@ fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
     }
 }
 
-fun NavGraphBuilder.homeRoute() {
+fun NavGraphBuilder.homeRoute(
+    navigateToWrite: () -> Unit
+) {
     composable(route = Screens.Home.route) {
-
+        HomeScreen(
+            onMenuClicked = {},
+            navigateToWrite = navigateToWrite,
+        )
     }
 }
 

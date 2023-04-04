@@ -3,4 +3,7 @@
     <string name="google_logo_desc">Google Logo</string>
     <string name="welcome_back_msg">Welcome Back!</string>
     <string name="sign_in_continue_msg">Please, Sign In to continue!</string>
+    <string name="hamburger_menu_msg">Hamburger Menu Icon</string>
+    <string name="date_icon_msg">Date Icon</string>
+    <string name="new_diary_icon_content_msg">New Diary Icon</string>
 </resources>
