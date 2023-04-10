@@ -8,4 +8,5 @@
     <string name="new_diary_icon_content_msg">New Diary Icon</string>
     <string name="sign_out_str">Sign Out</string>
     <string name="sign_out_alert_message">Are you sure you want to Sign Out from your Google Account?</string>
+    <string name="icon_mood_content_description">Icon Mood</string>
 </resources>
