@@ -9,4 +9,7 @@
     <string name="sign_out_str">Sign Out</string>
     <string name="sign_out_alert_message">Are you sure you want to Sign Out from your Google Account?</string>
     <string name="icon_mood_content_description">Icon Mood</string>
+    <string name="gallery_image_content_desc">Gallery image</string>
+    <string name="hide_gallery_str">Hide Gallery</string>
+    <string name="show_gallery_str">Show Gallery</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.raveline.diarymongoapp.presentation.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,7 @@ import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.ui.theme.Elevation
+import io.realm.kotlin.ext.realmListOf
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.*
@@ -41,6 +43,9 @@ fun DiaryHolder(
     val localDensity = LocalDensity.current
     var componentHeight by remember {
         mutableStateOf(0.dp)
+    }
+    var galleryOpened by remember {
+        mutableStateOf(false)
     }
 
     Row(modifier = Modifier.clickable(
@@ -80,6 +85,21 @@ fun DiaryHolder(
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis
                 )
+
+                if (diary.images.isNotEmpty()) {
+                    ShowGalleryButton(
+                        galleryOpened = galleryOpened,
+                        onClick = {
+                            galleryOpened = !galleryOpened
+                        }
+                    )
+                }
+
+                AnimatedVisibility(visible = galleryOpened) {
+                    Column(modifier = Modifier.padding(all = 14.dp)) {
+                        Gallery(images = diary.images)
+                    }
+                }
             }
         }
     }
@@ -137,6 +157,7 @@ fun DiaryHolderPreview() {
             "Why do I wanna fuck this girls so much? Because they are super hot? I have no idea."
         mood = Mood.Anxious.name
         date = Instant.now().toRealmInstant()
+        images = realmListOf("", "")
     }, onClick = {})
 }
 
