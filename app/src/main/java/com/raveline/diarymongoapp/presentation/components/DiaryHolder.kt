@@ -154,7 +154,7 @@ fun DiaryHolderPreview() {
     DiaryHolder(diary = DiaryModel().apply {
         title = "I wanna fuck some bitches"
         description =
-            "Why do I wanna fuck this girls so much? Because they are super hot? I have no idea."
+            "Because they are super? I have no idea."
         mood = Mood.Anxious.name
         date = Instant.now().toRealmInstant()
         images = realmListOf("", "")
