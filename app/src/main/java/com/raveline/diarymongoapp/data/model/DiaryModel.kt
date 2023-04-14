@@ -9,7 +9,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 import java.time.Instant
 
-class DiaryModel: RealmObject {
+open class DiaryModel: RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId.invoke()
     var ownerId: String = ""

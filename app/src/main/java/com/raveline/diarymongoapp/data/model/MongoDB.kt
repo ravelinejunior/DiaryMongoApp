@@ -16,10 +16,10 @@ object MongoDB : MongoRepository {
         if (user != null) {
             val config = SyncConfiguration.Builder(
                 user = user,
-                setOf(DiaryModel::class)
+                setOf(DiaryModel::class),
             ).initialSubscriptions { subscription ->
                 add(
-                    query = subscription.query("ownerId == $0", user.id),
+                    query = subscription.query<DiaryModel>("ownerId == $0", user.id),
                     name = "User's Diaries"
                 )
             }

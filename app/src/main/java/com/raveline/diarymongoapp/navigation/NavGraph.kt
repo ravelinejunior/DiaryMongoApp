@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
@@ -132,6 +133,11 @@ fun NavGraphBuilder.homeRoute(
             navigateToWrite = navigateToWrite,
         )
 
+        // Launching and initializing mongo db sync
+        LaunchedEffect(key1 = Unit) {
+            MongoDB.configureRealDatabase()
+        }
+
         // Sign out dialog
         DisplayAlertDialog(
             title = stringResource(id = R.string.sign_out_str),
@@ -143,7 +149,7 @@ fun NavGraphBuilder.homeRoute(
             onYesClicked = {
                 scope.launch(IO) {
                     App.create(Constants.MONGO_API_KEY).currentUser?.logOut()
-                    withContext(Main){
+                    withContext(Main) {
                         navigateToAuth()
                     }
                 }

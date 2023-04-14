@@ -8,6 +8,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
 import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.SetupNavGraph
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.ui.theme.DiaryMongoAppTheme
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         installSplashScreen()
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        MongoDB.configureRealDatabase()
         setContent {
            DiaryMongoAppTheme(dynamicColor = true) {
                val navController = rememberNavController()
