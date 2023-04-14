@@ -28,7 +28,7 @@ fun HomeScreen(
                 HomeTopBar(onMenuClicked = onMenuClicked)
             },
             content = {
-
+                HomeContent(diaryNotes = mapOf(), onClick = {})
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = navigateToWrite) {
