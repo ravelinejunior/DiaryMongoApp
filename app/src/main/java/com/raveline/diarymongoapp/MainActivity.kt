@@ -18,12 +18,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FirebaseApp.initializeApp(this)
-
         installSplashScreen()
 
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        MongoDB.configureRealDatabase()
+
+        FirebaseApp.initializeApp(this)
+
         setContent {
            DiaryMongoAppTheme(dynamicColor = true) {
                val navController = rememberNavController()
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
 private fun getStartDestination(): String {
     val user = App.create(Constants.MONGO_API_KEY).currentUser
-    return if (user != null && user.loggedIn) Screens.HomeSplash.route
+    return if (user != null && user.loggedIn) Screens.Home.route
     else Screens.Authentication.route
 }
 

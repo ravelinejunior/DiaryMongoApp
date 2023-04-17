@@ -21,6 +21,7 @@ import com.raveline.diarymongoapp.presentation.screens.authentication.Authentica
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
+import com.raveline.diarymongoapp.presentation.viewmodel.HomeViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
@@ -114,6 +115,9 @@ fun NavGraphBuilder.homeRoute(
 ) {
     composable(route = Screens.Home.route) {
 
+        val homeViewModel: HomeViewModel = viewModel()
+        val diaries by homeViewModel.diaries
+
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         var signOutDialogOpened: Boolean by remember {
             mutableStateOf(false)
@@ -121,6 +125,7 @@ fun NavGraphBuilder.homeRoute(
         val scope = rememberCoroutineScope()
 
         HomeScreen(
+            diaries = diaries,
             drawerState = drawerState,
             onMenuClicked = {
                 scope.launch {
@@ -135,7 +140,7 @@ fun NavGraphBuilder.homeRoute(
 
         // Launching and initializing mongo db sync
         LaunchedEffect(key1 = Unit) {
-            MongoDB.configureRealDatabase()
+            MongoDB.configureRealmDatabase()
         }
 
         // Sign out dialog

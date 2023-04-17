@@ -12,4 +12,6 @@
     <string name="gallery_image_content_desc">Gallery image</string>
     <string name="hide_gallery_str">Hide Gallery</string>
     <string name="show_gallery_str">Show Gallery</string>
+    <string name="internet_connection_verify_str">Verify your internet connection!</string>
+    <string name="something_went_wrong_str">Something went wrong!</string>
 </resources>

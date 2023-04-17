@@ -6,32 +6,72 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
+import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.repository.Diaries
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
+    diaries: Diaries,
     onMenuClicked: () -> Unit,
     navigateToWrite: () -> Unit,
     drawerState: DrawerState,
     onSignOutClicked: () -> Unit
 ) {
+
+    // Control padding of fab to not cause overlap
+    var padding by remember {
+        mutableStateOf(PaddingValues())
+    }
+
     NavigationDrawer(drawerState = drawerState, onSignOutClicked = onSignOutClicked) {
         Scaffold(
             topBar = {
                 HomeTopBar(onMenuClicked = onMenuClicked)
             },
             content = {
-                HomeContent(diaryNotes = mapOf(), onClick = {})
+
+                padding = it
+
+                when (diaries) {
+                    is RequestState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(100.dp),
+                                strokeWidth = 8.dp
+                            )
+                        }
+                    }
+                    is RequestState.Success -> {
+                        HomeContent(diaryNotes = diaries.data, onClick = {}, paddingValues = it)
+                    }
+                    is RequestState.Error -> {
+                        EmptyPage(
+                            title = stringResource(R.string.something_went_wrong_str),
+                            subtitle = stringResource(R.string.internet_connection_verify_str)
+                        )
+                    }
+                    else -> {}
+                }
+
+
             },
             floatingActionButton = {
-                FloatingActionButton(onClick = navigateToWrite) {
+                FloatingActionButton(
+                    modifier = Modifier.padding(end = padding.calculateEndPadding(LayoutDirection.Ltr)),
+                    onClick = navigateToWrite
+                ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.new_diary_icon_content_msg)
