@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
@@ -31,7 +32,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun SetupNavGraph(startDestination: String, navController: NavHostController) {
+fun SetupNavGraph(
+    startDestination: String,
+    navController: NavHostController,
+    onDataLoaded: () -> Unit
+) {
 
     NavHost(
         startDestination = startDestination,
@@ -40,7 +45,8 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
         authenticationRoute(
             navigateToHome = {
                 navController.navigate(Screens.HomeSplash.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
         homeSplashRoute(navController = navController)
         homeRoute(
@@ -50,7 +56,8 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
             navigateToAuth = {
                 navController.popBackStack()
                 navController.navigate(Screens.Authentication.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
         writeRoute()
     }
@@ -60,6 +67,7 @@ fun SetupNavGraph(startDestination: String, navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.authenticationRoute(
     navigateToHome: () -> Unit,
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screens.Authentication.route) {
 
@@ -69,6 +77,10 @@ fun NavGraphBuilder.authenticationRoute(
 
         val oneTapState = rememberOneTapSignInState()
         val messageBarState = rememberMessageBarState()
+
+        LaunchedEffect(key1 = Unit) {
+            onDataLoaded()
+        }
 
         AuthenticationScreen(
             authenticated = authenticated,
@@ -111,7 +123,8 @@ fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
 
 fun NavGraphBuilder.homeRoute(
     navigateToWrite: () -> Unit,
-    navigateToAuth: () -> Unit
+    navigateToAuth: () -> Unit,
+    onDataLoaded: () -> Unit
 ) {
     composable(route = Screens.Home.route) {
 
@@ -122,7 +135,15 @@ fun NavGraphBuilder.homeRoute(
         var signOutDialogOpened: Boolean by remember {
             mutableStateOf(false)
         }
+
         val scope = rememberCoroutineScope()
+
+        // dismiss splash screen
+        LaunchedEffect(key1 = diaries) {
+            if (diaries !is RequestState.Loading) {
+                onDataLoaded()
+            }
+        }
 
         HomeScreen(
             diaries = diaries,

@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -17,6 +18,7 @@ import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.repository.Diaries
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
@@ -32,10 +34,15 @@ fun HomeScreen(
         mutableStateOf(PaddingValues())
     }
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     NavigationDrawer(drawerState = drawerState, onSignOutClicked = onSignOutClicked) {
         Scaffold(
+            modifier = Modifier.nestedScroll(
+                scrollBehavior.nestedScrollConnection
+            ),
             topBar = {
-                HomeTopBar(onMenuClicked = onMenuClicked)
+                HomeTopBar(scrollBehavior = scrollBehavior, onMenuClicked = onMenuClicked)
             },
             content = {
 
@@ -53,15 +60,18 @@ fun HomeScreen(
                             )
                         }
                     }
+
                     is RequestState.Success -> {
                         HomeContent(diaryNotes = diaries.data, onClick = {}, paddingValues = it)
                     }
+
                     is RequestState.Error -> {
                         EmptyPage(
                             title = stringResource(R.string.something_went_wrong_str),
                             subtitle = stringResource(R.string.internet_connection_verify_str)
                         )
                     }
+
                     else -> {}
                 }
 
