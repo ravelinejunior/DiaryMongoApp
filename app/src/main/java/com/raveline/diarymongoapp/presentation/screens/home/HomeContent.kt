@@ -107,7 +107,7 @@ fun DateHeader(localDate: LocalDate) {
 
             Text(
                 text = "${localDate.year}",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.54f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.87f),
                 style = TextStyle(
                     fontSize = MaterialTheme.typography.bodySmall.fontSize,
                     fontWeight = FontWeight.Light
