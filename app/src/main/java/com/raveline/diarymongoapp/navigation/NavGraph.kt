@@ -15,12 +15,14 @@ import androidx.navigation.navArgument
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
+import com.raveline.diarymongoapp.presentation.screens.write.WriteScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.raveline.diarymongoapp.presentation.viewmodel.HomeViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -59,7 +61,11 @@ fun SetupNavGraph(
             },
             onDataLoaded = onDataLoaded
         )
-        writeRoute()
+        writeRoute(
+            onBackPressed = {
+                navController.popBackStack()
+            }
+        )
     }
 
 }
@@ -184,7 +190,9 @@ fun NavGraphBuilder.homeRoute(
     }
 }
 
-fun NavGraphBuilder.writeRoute() {
+fun NavGraphBuilder.writeRoute(
+    onBackPressed: () -> Unit
+) {
     composable(
         route = Screens.Write.route,
         arguments = listOf(navArgument(name = Constants.WRITE_SCREEN_ARGUMENT_ID) {
@@ -193,6 +201,18 @@ fun NavGraphBuilder.writeRoute() {
             defaultValue = null
         })
     ) {
-
+       /* WriteScreen(
+            selectedDiary = DiaryModel().apply {
+                title = "What the fuck is happening?"
+                description = stringResource(id = R.string.lorem_ipsum_str)
+            },
+            onDeleteClicked = { },
+            onBackPressed = onBackPressed
+        )*/
+        WriteScreen(
+            null,
+            onDeleteClicked = { },
+            onBackPressed = onBackPressed
+        )
     }
 }

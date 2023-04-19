@@ -14,4 +14,11 @@
     <string name="show_gallery_str">Show Gallery</string>
     <string name="internet_connection_verify_str">Verify your internet connection!</string>
     <string name="something_went_wrong_str">Something went wrong!</string>
+    <string name="back_arrow_icon_content_description">Back Arrow Icon Content Description</string>
+    <string name="happy_str">Happy</string>
+    <string name="date_example_str">19 ABRIL 2023, 10:45 AM</string>
+    <string name="date_icon_content_description">Date Icon Content Description</string>
+    <string name="delete_str">Delete</string>
+    <string name="overflow_menu_icon_content_description">Overflow Menu Icon Content Description</string>
+    <string name="lorem_ipsum_str">n publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.</string>
 </resources>
