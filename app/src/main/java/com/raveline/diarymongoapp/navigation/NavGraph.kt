@@ -12,10 +12,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.RequestState
-import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
@@ -190,9 +191,11 @@ fun NavGraphBuilder.homeRoute(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 fun NavGraphBuilder.writeRoute(
     onBackPressed: () -> Unit
 ) {
+
     composable(
         route = Screens.Write.route,
         arguments = listOf(navArgument(name = Constants.WRITE_SCREEN_ARGUMENT_ID) {
@@ -201,16 +204,12 @@ fun NavGraphBuilder.writeRoute(
             defaultValue = null
         })
     ) {
-       /* WriteScreen(
-            selectedDiary = DiaryModel().apply {
-                title = "What the fuck is happening?"
-                description = stringResource(id = R.string.lorem_ipsum_str)
-            },
-            onDeleteClicked = { },
-            onBackPressed = onBackPressed
-        )*/
+
+        val pagerState = rememberPagerState()
+
         WriteScreen(
-            null,
+            selectedDiary = null,
+            pagerState = pagerState,
             onDeleteClicked = { },
             onBackPressed = onBackPressed
         )

@@ -21,4 +21,8 @@
     <string name="delete_str">Delete</string>
     <string name="overflow_menu_icon_content_description">Overflow Menu Icon Content Description</string>
     <string name="lorem_ipsum_str">n publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.</string>
+    <string name="mood_icon_content_description">Mood Icon Content Description</string>
+    <string name="title_str">Title</string>
+    <string name="description_str">Tell me about it.</string>
+    <string name="save_str">Save</string>
 </resources>
