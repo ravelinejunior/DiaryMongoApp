@@ -25,6 +25,7 @@ fun HomeScreen(
     diaries: Diaries,
     onMenuClicked: () -> Unit,
     navigateToWrite: () -> Unit,
+    navigateToWriteWithArgs: (String) -> Unit,
     drawerState: DrawerState,
     onSignOutClicked: () -> Unit
 ) {
@@ -49,6 +50,7 @@ fun HomeScreen(
                 padding = it
 
                 when (diaries) {
+                    is RequestState.Idle,
                     is RequestState.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -62,7 +64,11 @@ fun HomeScreen(
                     }
 
                     is RequestState.Success -> {
-                        HomeContent(diaryNotes = diaries.data, onClick = {}, paddingValues = it)
+                        HomeContent(
+                            diaryNotes = diaries.data,
+                            onClick = navigateToWriteWithArgs,
+                            paddingValues = it
+                        )
                     }
 
                     is RequestState.Error -> {
@@ -72,7 +78,6 @@ fun HomeScreen(
                         )
                     }
 
-                    else -> {}
                 }
 
 

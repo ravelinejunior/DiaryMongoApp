@@ -70,7 +70,7 @@ fun DiaryHolder(
         interactionSource = remember {
             MutableInteractionSource()
         }
-    ) { onClick(diary._id.toString()) }) {
+    ) { onClick(diary._id.toHexString()) }) {
         Spacer(modifier = Modifier.width(14.dp))
 
         //Line of the main screen for each card

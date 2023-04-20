@@ -11,8 +11,9 @@ sealed class Screens(val route: String) {
     object HomeSplash : Screens(route = HOME_SPLASH_SCREEN)
     object Home : Screens(route = HOME_SCREEN)
     object Write :
-        Screens(route = "$WRITE_SCREEN?$WRITE_SCREEN_ARGUMENT_ID={$WRITE_SCREEN_ARGUMENT_ID") {
+        Screens(route = "$WRITE_SCREEN?$WRITE_SCREEN_ARGUMENT_ID={$WRITE_SCREEN_ARGUMENT_ID}") {
         fun passDiaryId(diaryId: String) =
             "$WRITE_SCREEN?$WRITE_SCREEN_ARGUMENT_ID=$diaryId"
     }
+
 }

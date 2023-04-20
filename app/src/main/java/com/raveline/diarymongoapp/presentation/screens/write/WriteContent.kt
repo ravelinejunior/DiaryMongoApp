@@ -1,19 +1,15 @@
 package com.raveline.diarymongoapp.presentation.screens.write
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -25,13 +21,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -40,6 +38,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.data.model.Mood
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +52,12 @@ fun WriteContent(
 ) {
 
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = scrollState.maxValue) {
+        scrollState.scrollTo(scrollState.maxValue)
+    }
 
     Column(
         modifier = Modifier
@@ -88,69 +93,56 @@ fun WriteContent(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Title
+            // Title Field
             TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = title,
                 onValueChange = onTitleChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
-                    .background(Color(0x80FFFFFF)),
-                placeholder = {
-                    Text(text = stringResource(id = R.string.title_str))
-                },
+                placeholder = { Text(text = stringResource(id = R.string.title_str)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                    containerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Unspecified,
                     disabledIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
-                    disabledPlaceholderColor = Color.Unspecified,
-                    errorPlaceholderColor = Color.Red,
-                    focusedPlaceholderColor = Color.Unspecified,
-                    unfocusedPlaceholderColor = Color.Unspecified,
+                    focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                 ),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = {},
+                    onNext = {
+                        scope.launch {
+                            scrollState.animateScrollTo(Int.MAX_VALUE)
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    }
                 ),
                 maxLines = 1,
-                singleLine = true,
+                singleLine = true
             )
-
-            // Description
+            // Description Field
             TextField(
+                modifier = Modifier.fillMaxWidth(),
                 value = description,
                 onValueChange = onDescriptionChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 100.dp)
-                    .padding(16.dp)
-                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
-                    .background(Color(0x80FFFFFF)),
-                placeholder = {
-                    Text(text = stringResource(id = R.string.description_str))
-                },
+                placeholder = { Text(text = stringResource(id = R.string.description_str)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White.copy(alpha = 0.92f),
+                    containerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Unspecified,
                     disabledIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
-                    disabledPlaceholderColor = Color.Unspecified,
-                    errorPlaceholderColor = Color.Red,
-                    focusedPlaceholderColor = Color.Unspecified,
-                    unfocusedPlaceholderColor = Color.Unspecified,
+                    focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                 ),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onNext = {},
-                ),
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                )
             )
         }
 

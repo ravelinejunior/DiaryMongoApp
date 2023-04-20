@@ -29,7 +29,8 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         setContent {
-           DiaryMongoAppTheme(dynamicColor = true) {
+           DiaryMongoAppTheme(dynamicColor = false) {
+
                val navController = rememberNavController()
 
                SetupNavGraph(

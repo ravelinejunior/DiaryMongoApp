@@ -48,7 +48,13 @@ object MongoDB : MongoRepository {
     }
 
     override fun getAllDiaries(): Flow<Diaries> {
+
+        flow {
+            emit(RequestState.Loading)
+        }
+
         return if (user != null) {
+
             try {
                 Log.d(
                     TAG,
@@ -75,7 +81,7 @@ object MongoDB : MongoRepository {
             }
         } else {
             flow {
-                emit(RequestState.Error(UserNotAuthenticatedException()))
+                emit(RequestState.Loading)
             }
         }
     }

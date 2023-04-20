@@ -1,11 +1,13 @@
 package com.raveline.diarymongoapp.navigation
 
+import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -16,6 +18,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.navigation.screens.Screens
@@ -26,6 +29,7 @@ import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.screens.write.WriteScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.raveline.diarymongoapp.presentation.viewmodel.HomeViewModel
+import com.raveline.diarymongoapp.presentation.viewmodel.WriteViewModel
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
@@ -33,6 +37,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+val TAG: String = NavGraph::class.java.simpleName
 
 @Composable
 fun SetupNavGraph(
@@ -45,13 +51,16 @@ fun SetupNavGraph(
         startDestination = startDestination,
         navController = navController,
     ) {
+
         authenticationRoute(
             navigateToHome = {
                 navController.navigate(Screens.HomeSplash.route)
             },
             onDataLoaded = onDataLoaded
         )
+
         homeSplashRoute(navController = navController)
+
         homeRoute(
             navigateToWrite = {
                 navController.navigate(Screens.Write.route)
@@ -60,8 +69,16 @@ fun SetupNavGraph(
                 navController.popBackStack()
                 navController.navigate(Screens.Authentication.route)
             },
+            navigateToWriteWithArgs = { diaryId ->
+                try {
+                    navController.navigate(Screens.Write.passDiaryId(diaryId = diaryId))
+                } catch (e: Exception) {
+                    Log.e(TAG, "Navigation Error: ${e.message}")
+                }
+            },
             onDataLoaded = onDataLoaded
         )
+
         writeRoute(
             onBackPressed = {
                 navController.popBackStack()
@@ -130,8 +147,9 @@ fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
 
 fun NavGraphBuilder.homeRoute(
     navigateToWrite: () -> Unit,
+    navigateToWriteWithArgs: (String) -> Unit,
     navigateToAuth: () -> Unit,
-    onDataLoaded: () -> Unit
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screens.Home.route) {
 
@@ -164,6 +182,7 @@ fun NavGraphBuilder.homeRoute(
                 signOutDialogOpened = true
             },
             navigateToWrite = navigateToWrite,
+            navigateToWriteWithArgs = navigateToWriteWithArgs
         )
 
         // Launching and initializing mongo db sync
@@ -198,14 +217,21 @@ fun NavGraphBuilder.writeRoute(
 
     composable(
         route = Screens.Write.route,
-        arguments = listOf(navArgument(name = Constants.WRITE_SCREEN_ARGUMENT_ID) {
-            type = NavType.StringType
-            nullable = true
-            defaultValue = null
-        })
+        arguments = listOf(
+            navArgument(name = WRITE_SCREEN_ARGUMENT_ID) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
     ) {
 
+        val writeViewModel: WriteViewModel = viewModel()
+        val uiState = writeViewModel.uiState
         val pagerState = rememberPagerState()
+
+        LaunchedEffect(key1 = uiState) {
+            Log.d(TAG, "Selected Diary Id: ${uiState.selectedDiaryId}")
+        }
 
         WriteScreen(
             selectedDiary = null,
