@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 class AuthenticationViewModel : ViewModel() {
 
     var authenticated = mutableStateOf(false)
-    private set
+        private set
 
     var loadingState = mutableStateOf(false)
         private set
@@ -29,7 +29,7 @@ class AuthenticationViewModel : ViewModel() {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit,
 
-    ) {
+        ) {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
@@ -42,11 +42,11 @@ class AuthenticationViewModel : ViewModel() {
                 }
                 withContext(Main) {
 
-                    if(result) {
+                    if (result) {
                         onSuccess()
                         delay(600)
                         authenticated.value = true
-                    }else{
+                    } else {
                         onError(Exception("User not logged in"))
                     }
                 }

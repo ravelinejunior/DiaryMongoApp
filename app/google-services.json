@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "923563665367",
+    "project_id": "diarydaily-feb4e",
+    "storage_bucket": "diarydaily-feb4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923563665367:android:8de7bc7ac695ce4fddcd92",
+        "android_client_info": {
+          "package_name": "com.raveline.diaryappnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923563665367-hio2plenvbtn8em5ffjbvqhvqpvg2act.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW2K8n1u302W2qohUNOiC7VA3qRPXcBtU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923563665367-hio2plenvbtn8em5ffjbvqhvqpvg2act.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923563665367:android:a9f850ad61bf1aedddcd92",
+        "android_client_info": {
+          "package_name": "com.raveline.diarymongoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923563665367-hio2plenvbtn8em5ffjbvqhvqpvg2act.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW2K8n1u302W2qohUNOiC7VA3qRPXcBtU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923563665367-hio2plenvbtn8em5ffjbvqhvqpvg2act.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -16,6 +16,7 @@ import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import org.mongodb.kbson.ObjectId
 import java.time.ZoneId
 
 object MongoDB : MongoRepository {
@@ -76,7 +77,7 @@ object MongoDB : MongoRepository {
                     }
             } catch (e: Exception) {
                 flow {
-                    emit(RequestState.Error(UserNotAuthenticatedException("getAllDiariesException: ${e.message}")))
+                    emit(RequestState.Error(UserNotAuthenticatedException("All Diaries Exception: ${e.message}")))
                 }
             }
         } else {
@@ -85,7 +86,29 @@ object MongoDB : MongoRepository {
             }
         }
     }
+
+    override fun getSelectedDiary(diaryId: ObjectId): RequestState<DiaryModel> {
+        return if (user != null) {
+            try {
+                val diary = realm.query<DiaryModel>(query = "_id == $0", diaryId).find().first()
+                RequestState.Success(data = diary)
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
 }
 
 private class UserNotAuthenticatedException(msg: String? = "User is not Logged in.") :
     Exception(msg)
+
+
+
+
+
+
+
+
+
