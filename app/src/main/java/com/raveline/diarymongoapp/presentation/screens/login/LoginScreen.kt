@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
@@ -182,7 +183,8 @@ fun LoginScreen(
                     Text(
                         text = "Already have an account? Sign in",
                         style = TextStyle(
-                            color = MaterialTheme.colorScheme.surface
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface
                         ),
                         modifier = Modifier
                             .padding(top = 16.dp)
