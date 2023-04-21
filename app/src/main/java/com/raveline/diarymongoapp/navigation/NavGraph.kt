@@ -25,6 +25,8 @@ import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
+import com.raveline.diarymongoapp.presentation.screens.login.LoginScreen
+import com.raveline.diarymongoapp.presentation.screens.signup.SignUpScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.screens.write.WriteScreen
 import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
@@ -56,7 +58,42 @@ fun SetupNavGraph(
             navigateToHome = {
                 navController.navigate(Screens.HomeSplash.route)
             },
-            onDataLoaded = onDataLoaded
+            onDataLoaded = onDataLoaded,
+            onNavigateToLogin = {
+                navController.navigate(Screens.Login.route)
+            }
+        )
+
+        signUpRoute(
+            onValueNameChange = {
+
+            },
+            onValueEmailChange = {
+
+            },
+            onValuePasswordChange = {
+
+            },
+            onValueConfirmedPasswordChange = {
+
+            },
+            onClick = {},
+            onNavigateToLogin = {
+                navController.navigate(Screens.Login.route)
+            }
+        )
+
+        loginRoute(
+            onValueEmailChange = {
+
+            },
+            onValuePasswordChange = {
+
+            },
+            onClick = {},
+            onNavigateToSignUp = {
+                navController.navigate(Screens.SignUp.route)
+            }
         )
 
         homeSplashRoute(navController = navController)
@@ -92,6 +129,7 @@ fun SetupNavGraph(
 fun NavGraphBuilder.authenticationRoute(
     navigateToHome: () -> Unit,
     onDataLoaded: () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
     composable(route = Screens.Authentication.route) {
 
@@ -134,7 +172,45 @@ fun NavGraphBuilder.authenticationRoute(
             onDialogDismiss = { message ->
                 messageBarState.addError(Exception(message))
             },
+
             navigateToHome = navigateToHome,
+            onNavigateToLogin = onNavigateToLogin
+        )
+    }
+}
+
+fun NavGraphBuilder.loginRoute(
+    onValueEmailChange: (String) -> Unit,
+    onValuePasswordChange: (String) -> Unit,
+    onClick: () -> Unit,
+    onNavigateToSignUp: () -> Unit
+) {
+    composable(route = Screens.Login.route) {
+        LoginScreen(
+            onValueEmailChange = onValueEmailChange,
+            onValuePasswordChange = onValuePasswordChange,
+            onClick = onClick,
+            onNavigateToSignUp = onNavigateToSignUp
+        )
+    }
+}
+
+fun NavGraphBuilder.signUpRoute(
+    onValueNameChange: (String) -> Unit,
+    onValueEmailChange: (String) -> Unit,
+    onValuePasswordChange: (String) -> Unit,
+    onValueConfirmedPasswordChange: (String) -> Unit,
+    onClick: () -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
+    composable(route = Screens.SignUp.route) {
+        SignUpScreen(
+            onValueNameChange = onValueNameChange,
+            onValueEmailChange = onValueEmailChange,
+            onValuePasswordChange = onValuePasswordChange,
+            onValueConfirmedPasswordChange = onValueConfirmedPasswordChange,
+            onClick = onClick,
+            onNavigateToLogin = onNavigateToLogin
         )
     }
 }

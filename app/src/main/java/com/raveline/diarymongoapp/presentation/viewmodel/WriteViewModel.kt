@@ -66,7 +66,7 @@ class WriteViewModel(
         )
     }
 
-    fun setMood(mood: Mood) {
+    private fun setMood(mood: Mood) {
         uiState = uiState.copy(
             mood = mood
         )

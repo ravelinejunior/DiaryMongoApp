@@ -28,7 +28,8 @@ fun AuthenticationScreen(
     messageBarState: MessageBarState,
     onTokenIdReceived: (String) -> Unit,
     onDialogDismiss: (String) -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
 
     Scaffold(
@@ -39,7 +40,8 @@ fun AuthenticationScreen(
             ContentWithMessageBar(messageBarState = messageBarState, errorMaxLines = 3) {
                 AuthenticationContent(
                     loadingState = loadingState,
-                    onButtonClicked = onButtonClicked
+                    onButtonClicked = onButtonClicked,
+                    onNavigateToLogin = onNavigateToLogin
                 )
             }
         })
