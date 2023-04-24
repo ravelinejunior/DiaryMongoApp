@@ -1,9 +1,7 @@
 package com.raveline.diarymongoapp.presentation.screens.write
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
@@ -26,18 +24,54 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
+import com.raveline.diarymongoapp.common.utlis.toInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WriteTopBar(
     selectedDiary: DiaryModel?,
+    moodName: () -> String,
     onDeleteClicked: () -> Unit,
     onBackPressed: () -> Unit
 ) {
+
+    val currentDate by remember {
+        mutableStateOf(LocalDate.now())
+    }
+
+    val currentTime by remember {
+        mutableStateOf(LocalTime.now())
+    }
+
+    val formattedDate = remember(key1 = currentDate) {
+        DateTimeFormatter.ofPattern(
+            "dd MMM yyyy"
+        ).format(currentDate).uppercase()
+    }
+
+    val formattedTime = remember(key1 = currentTime) {
+        DateTimeFormatter.ofPattern(
+            "hh:mm a"
+        ).format(currentTime).uppercase()
+    }
+
+    val selectedDiaryDateTime = remember(selectedDiary) {
+        if (selectedDiary != null) {
+            SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
+                .format(Date.from(selectedDiary?.date?.toInstant()))
+        } else {
+            "Unknown"
+        }
+    }
 
     CenterAlignedTopAppBar(
         navigationIcon = {
@@ -52,7 +86,7 @@ fun WriteTopBar(
             Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.happy_str),
+                    text = moodName(),
                     style = TextStyle(
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold
@@ -61,7 +95,8 @@ fun WriteTopBar(
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.date_example_str),
+                    text = if (selectedDiary != null) selectedDiaryDateTime
+                    else "$formattedDate, $formattedTime",
                     style = TextStyle(
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
                         fontWeight = FontWeight.Normal

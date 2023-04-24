@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,7 @@ class WriteViewModel(
             if (diary is RequestState.Success) {
                 val data = diary.data
                 withContext(Dispatchers.Main) {
+                    setSelectedDiary(diaryModel = data)
                     setTitle(title = data.title)
                     setDescription(description = data.description)
                     setMood(Mood.valueOf(data.mood))
@@ -72,11 +74,16 @@ class WriteViewModel(
         )
     }
 
+    fun setSelectedDiary(diaryModel: DiaryModel) {
+        uiState = uiState.copy(selectedDiary = diaryModel)
+    }
+
 
 }
 
 data class UiState(
     val selectedDiaryId: String? = null,
+    val selectedDiary: DiaryModel? = null,
     val title: String = "",
     val description: String = "",
     val mood: Mood = Mood.Neutral,

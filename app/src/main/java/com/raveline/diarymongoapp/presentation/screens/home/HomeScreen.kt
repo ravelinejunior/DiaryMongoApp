@@ -50,7 +50,6 @@ fun HomeScreen(
                 padding = it
 
                 when (diaries) {
-                    is RequestState.Idle,
                     is RequestState.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -76,6 +75,17 @@ fun HomeScreen(
                             title = stringResource(R.string.something_went_wrong_str),
                             subtitle = stringResource(R.string.internet_connection_verify_str)
                         )
+                    }
+                    else ->{
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(100.dp),
+                                strokeWidth = 8.dp
+                            )
+                        }
                     }
 
                 }

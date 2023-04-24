@@ -50,10 +50,6 @@ object MongoDB : MongoRepository {
 
     override fun getAllDiaries(): Flow<Diaries> {
 
-        flow {
-            emit(RequestState.Loading)
-        }
-
         return if (user != null) {
 
             try {
@@ -82,7 +78,7 @@ object MongoDB : MongoRepository {
             }
         } else {
             flow {
-                emit(RequestState.Loading)
+                emit(RequestState.Error(UserNotAuthenticatedException("Nothing to show here")))
             }
         }
     }

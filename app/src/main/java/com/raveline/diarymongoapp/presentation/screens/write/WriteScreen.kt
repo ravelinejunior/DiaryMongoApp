@@ -15,7 +15,7 @@ import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 @Composable
 fun WriteScreen(
     uiState: UiState,
-    selectedDiary: DiaryModel?,
+    moodName: () -> String,
     pagerState: PagerState,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
@@ -31,8 +31,9 @@ fun WriteScreen(
     Scaffold(
         topBar = {
             WriteTopBar(
-                selectedDiary = selectedDiary,
                 onDeleteClicked = onDeleteClicked,
+                moodName = moodName,
+                selectedDiary = uiState.selectedDiary,
                 onBackPressed = onBackPressed
             )
         },

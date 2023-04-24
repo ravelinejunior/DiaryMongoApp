@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +25,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,25 +39,41 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.raveline.diarymongoapp.R
+import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.login.CurvedShape
+import com.raveline.diarymongoapp.presentation.viewmodel.SignUpViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignUpScreen(
-    onValueNameChange: (String) -> Unit,
-    onValueEmailChange: (String) -> Unit,
-    onValuePasswordChange: (String) -> Unit,
-    onValueConfirmedPasswordChange: (String) -> Unit,
-    onClick: () -> Unit,
+    navController: NavHostController,
     onNavigateToLogin: () -> Unit
 ) {
+
+    val viewModel: SignUpViewModel = viewModel()
 
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+
+    // Create mutable state variables for the email and password fields
+    val emailState = remember {
+        mutableStateOf("")
+    }
+    val nameState = remember {
+        mutableStateOf("")
+    }
+    val passwordState = remember {
+        mutableStateOf("")
+    }
+    val confirmPasswordState = remember {
+        mutableStateOf("")
+    }
 
     LaunchedEffect(key1 = scrollState.maxValue) {
         scrollState.scrollTo(scrollState.maxValue)
@@ -88,8 +108,10 @@ fun SignUpScreen(
 
                 // Name text field
                 TextField(
-                    value = "",
-                    onValueChange = onValueNameChange,
+                    value = nameState.value,
+                    onValueChange = {
+                        nameState.value = it
+                    },
                     placeholder = { Text("Name") },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
@@ -121,8 +143,10 @@ fun SignUpScreen(
 
                 // Email text field
                 TextField(
-                    value = "",
-                    onValueChange = onValueEmailChange,
+                    value = emailState.value,
+                    onValueChange = {
+                        emailState.value = it
+                    },
                     placeholder = { Text("Email") },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -154,8 +178,10 @@ fun SignUpScreen(
 
                 // Password text field
                 TextField(
-                    value = "",
-                    onValueChange = onValuePasswordChange,
+                    value = passwordState.value,
+                    onValueChange = {
+                        passwordState.value = it
+                    },
                     placeholder = { Text("Password") },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -187,8 +213,10 @@ fun SignUpScreen(
 
                 // Confirm Password text field
                 TextField(
-                    value = "",
-                    onValueChange = onValueConfirmedPasswordChange,
+                    value = confirmPasswordState.value,
+                    onValueChange = {
+                        confirmPasswordState.value = it
+                    },
                     placeholder = { Text("Confirm Password") },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -216,12 +244,26 @@ fun SignUpScreen(
                     ),
                     maxLines = 1,
                     singleLine = true
-
                 )
+
+                // Is loading
+                if (viewModel.isLoading.value) {
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            strokeWidth = 8.dp
+                        )
+                    }
+                }
 
                 // Sign up button
                 Button(
-                    onClick = onClick,
+                    onClick = {
+                        viewModel.signup(emailState.value, passwordState.value)
+                    },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 32.dp)
                         .fillMaxWidth()
@@ -231,7 +273,7 @@ fun SignUpScreen(
 
                 // Navigate to login screen text
                 Text(
-                    text = "Already have an account? Sign in",
+                    text = "Don't have an account? Sign up",
                     style = TextStyle(
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurface
@@ -244,9 +286,13 @@ fun SignUpScreen(
                         }
                 )
 
-
+                // Validate user and go to home Screen
+                if (viewModel.userSignedUp.value) {
+                    navController.navigate(Screens.Home.route)
+                }
             }
         }
+
     }
 
 

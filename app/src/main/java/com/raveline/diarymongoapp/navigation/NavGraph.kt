@@ -21,6 +21,7 @@ import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.model.MongoDB
+import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
@@ -65,19 +66,7 @@ fun SetupNavGraph(
         )
 
         signUpRoute(
-            onValueNameChange = {
-
-            },
-            onValueEmailChange = {
-
-            },
-            onValuePasswordChange = {
-
-            },
-            onValueConfirmedPasswordChange = {
-
-            },
-            onClick = {},
+            navController = navController,
             onNavigateToLogin = {
                 navController.navigate(Screens.Login.route)
             }
@@ -196,20 +185,13 @@ fun NavGraphBuilder.loginRoute(
 }
 
 fun NavGraphBuilder.signUpRoute(
-    onValueNameChange: (String) -> Unit,
-    onValueEmailChange: (String) -> Unit,
-    onValuePasswordChange: (String) -> Unit,
-    onValueConfirmedPasswordChange: (String) -> Unit,
-    onClick: () -> Unit,
+    navController: NavHostController,
     onNavigateToLogin: () -> Unit
 ) {
     composable(route = Screens.SignUp.route) {
+
         SignUpScreen(
-            onValueNameChange = onValueNameChange,
-            onValueEmailChange = onValueEmailChange,
-            onValuePasswordChange = onValuePasswordChange,
-            onValueConfirmedPasswordChange = onValueConfirmedPasswordChange,
-            onClick = onClick,
+            navController = navController,
             onNavigateToLogin = onNavigateToLogin
         )
     }
@@ -304,6 +286,9 @@ fun NavGraphBuilder.writeRoute(
         val writeViewModel: WriteViewModel = viewModel()
         val uiState = writeViewModel.uiState
         val pagerState = rememberPagerState()
+        val pageNumber by remember {
+            derivedStateOf { pagerState.currentPage }
+        }
 
         LaunchedEffect(key1 = uiState) {
             Log.d(TAG, "Selected Diary Id: ${uiState.selectedDiaryId}")
@@ -311,8 +296,10 @@ fun NavGraphBuilder.writeRoute(
 
         WriteScreen(
             uiState = uiState,
-            selectedDiary = null,
             pagerState = pagerState,
+            moodName = {
+                Mood.values()[pageNumber].name
+            },
             onTitleChanged = {
                 writeViewModel.setTitle(title = it)
             },
