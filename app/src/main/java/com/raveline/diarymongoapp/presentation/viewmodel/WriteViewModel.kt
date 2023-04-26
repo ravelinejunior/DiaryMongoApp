@@ -8,14 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
+import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
+import java.time.ZonedDateTime
 
 class WriteViewModel(
     private val savedStateHandle: SavedStateHandle
@@ -55,6 +58,10 @@ class WriteViewModel(
                 }
             }
         }
+    }
+
+    fun updateDateTime(zonedDateTime: ZonedDateTime) {
+        uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
     }
 
     fun setTitle(title: String) {
@@ -109,7 +116,13 @@ class WriteViewModel(
         onError: (String) -> Unit
     ) = viewModelScope.launch(IO) {
 
-        when (val result = MongoDB.insertDiary(diaryModel)) {
+        when (val result = MongoDB.insertDiary(
+            diaryModel = diaryModel.apply {
+                // verify if user selected the date
+                date = uiState.selectedDiary!!.date
+            }
+        )
+        ) {
             is RequestState.Success -> {
                 withContext(Main) {
                     onSuccess()
@@ -137,7 +150,15 @@ class WriteViewModel(
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) = viewModelScope.launch(IO) {
-        when (val result = MongoDB.updateDiary(diaryModel)) {
+        when (val result = MongoDB.updateDiary(
+            diaryModel = diaryModel.apply {
+            // verify if user selected the date
+            date = if (uiState.updatedDateTime != null) {
+                uiState.updatedDateTime!!
+            } else {
+                uiState.selectedDiary!!.date
+            }
+        })) {
             is RequestState.Success -> {
                 withContext(Main) {
                     onSuccess()
@@ -166,4 +187,5 @@ data class UiState(
     val title: String = "",
     val description: String = "",
     val mood: Mood = Mood.Neutral,
+    val updatedDateTime: RealmInstant? = null
 )

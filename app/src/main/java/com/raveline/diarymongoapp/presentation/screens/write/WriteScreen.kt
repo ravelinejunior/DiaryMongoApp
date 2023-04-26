@@ -9,6 +9,7 @@ import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalPagerApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -21,7 +22,8 @@ fun WriteScreen(
     onDescriptionChanged: (String) -> Unit,
     onDeleteClicked: () -> Unit,
     onBackPressed: () -> Unit,
-    onSaveClicked: (DiaryModel?) -> Unit
+    onSaveClicked: (DiaryModel?) -> Unit,
+    onDateTimeUpdated: (ZonedDateTime) -> Unit,
 ) {
 
     // Update the mood when selecting a diary
@@ -35,7 +37,8 @@ fun WriteScreen(
                 onDeleteClicked = onDeleteClicked,
                 moodName = moodName,
                 selectedDiary = uiState.selectedDiary,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                onDateTimeUpdated = onDateTimeUpdated
             )
         },
         content = {
@@ -47,7 +50,7 @@ fun WriteScreen(
                 description = uiState.description,
                 onDescriptionChanged = onDescriptionChanged,
                 paddingValues = it,
-                onSaveClicked = onSaveClicked
+                onSaveClicked = onSaveClicked,
             )
         }
     )

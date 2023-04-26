@@ -319,7 +319,7 @@ fun NavGraphBuilder.writeRoute(
             onBackPressed = onBackPressed,
             onSaveClicked = { diary ->
                 diary?.apply {
-                    //Setting the selected mood saved on viewmodel
+                    //Setting the selected mood saved on viewModel
                     mood = Mood.values()[pageNumber].name
                 }?.let { finalDiary ->
                     writeViewModel.upsertDiary(
@@ -327,9 +327,14 @@ fun NavGraphBuilder.writeRoute(
                         onSuccess = {
                             onBackPressed()
                         },
-                        onError = {}
+                        onError = {
+                            Log.e(TAG, "writeRoute: $it", )
+                        }
                     )
                 }
+            },
+            onDateTimeUpdated = {
+                writeViewModel.updateDateTime(zonedDateTime = it)
             }
         )
     }
