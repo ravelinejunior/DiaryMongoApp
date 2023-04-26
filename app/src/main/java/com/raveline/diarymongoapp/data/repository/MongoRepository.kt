@@ -10,9 +10,13 @@ import java.time.LocalDate
 typealias Diaries = RequestState<Map<LocalDate, List<DiaryModel>>>
 
 interface MongoRepository {
+
     fun configureRealmDatabase()
+
     fun getAllDiaries(): Flow<Diaries>
 
     fun getSelectedDiary(diaryId:ObjectId):RequestState<DiaryModel>
+
+    suspend fun addNewDiary(diaryModel: DiaryModel):RequestState<DiaryModel>
 
 }

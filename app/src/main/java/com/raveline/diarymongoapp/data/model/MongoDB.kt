@@ -95,6 +95,26 @@ object MongoDB : MongoRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
+
+    override suspend fun addNewDiary(diaryModel: DiaryModel): RequestState<DiaryModel> {
+        return if (user != null) {
+            try {
+                val addedDiary = realm.write {
+                    //Setting the ownerId into the diary
+                    this.copyToRealm(
+                        diaryModel.apply {
+                            ownerId = user.id
+                        }
+                    )
+                }
+                RequestState.Success(data = addedDiary)
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException("Wasn't possible to add this new diary"))
+        }
+    }
 }
 
 private class UserNotAuthenticatedException(msg: String? = "User is not Logged in.") :

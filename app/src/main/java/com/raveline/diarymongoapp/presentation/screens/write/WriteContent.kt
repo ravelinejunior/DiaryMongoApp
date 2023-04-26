@@ -1,5 +1,7 @@
 package com.raveline.diarymongoapp.presentation.screens.write
 
+import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -37,23 +40,29 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.R
+import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun WriteContent(
+    uiState: UiState,
     pagerState: PagerState,
     title: String,
     onTitleChanged: (String) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
+    onSaveClicked: (DiaryModel?) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+
 
     LaunchedEffect(key1 = scrollState.maxValue) {
         scrollState.scrollTo(scrollState.maxValue)
@@ -151,8 +160,28 @@ fun WriteContent(
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp),
-                onClick = {},
+                    .height(54.dp)
+                    .border(
+                        width = 0.3.dp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                onClick = {
+                    if (uiState.title.isNotEmpty() && uiState.description.isNotEmpty()) {
+                        onSaveClicked(
+                            DiaryModel().apply {
+                                this.title = uiState.title
+                                this.description = uiState.description
+                            }
+                        )
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Title and description must be filled!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
                 shape = Shapes().small
             ) {
                 Text(text = stringResource(R.string.save_str))

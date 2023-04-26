@@ -12,6 +12,8 @@ import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
@@ -74,10 +76,38 @@ class WriteViewModel(
         )
     }
 
-    fun setSelectedDiary(diaryModel: DiaryModel) {
+    private fun setSelectedDiary(diaryModel: DiaryModel) {
         uiState = uiState.copy(selectedDiary = diaryModel)
     }
 
+
+    fun insertDiary(
+        diaryModel: DiaryModel,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = viewModelScope.launch(IO) {
+
+        when (val result = MongoDB.addNewDiary(diaryModel)) {
+            is RequestState.Success -> {
+                withContext(Main) {
+                    onSuccess()
+                }
+            }
+
+            is RequestState.Error -> {
+                withContext(Main) {
+                    onError(result.error.message.toString())
+                }
+            }
+
+            else -> {
+                withContext(Main) {
+                    onError("Something went wrong. Try again.")
+                }
+            }
+        }
+
+    }
 
 }
 

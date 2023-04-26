@@ -25,36 +25,39 @@ class SignUpViewModel : ViewModel() {
 
     fun signup(email: String, password: String) = viewModelScope.launch {
 
-        isLoading.value = true
 
-        try {
+        if (email.isNotEmpty().and(email.contains("@")) && password.isNotEmpty()) {
 
-            //Create a condition to see if the user is created
-            realmApp.emailPasswordAuth.registerUser(email.trim(), password.trim())
+            isLoading.value = true
 
-            // Login user after it
-            val user = realmApp.login(Credentials.emailPassword(email, password))
-            if (user.loggedIn) {
+            try {
 
-                userSignedUp.value = true
-                Log.i(TAG, "Success Signup user. ")
+                //Create a condition to see if the user is created
+                realmApp.emailPasswordAuth.registerUser(email.trim(), password.trim())
 
-            } else {
+                // Login user after it
+                val user = realmApp.login(Credentials.emailPassword(email, password))
+                if (user.loggedIn) {
 
-                Log.e(TAG, "User could not signup")
+                    userSignedUp.value = true
+                    Log.i(TAG, "Success Signup user. ")
 
+                } else {
+
+                    Log.e(TAG, "User could not signup")
+
+                }
+
+            } catch (e: UserAlreadyExistsException) {
+                Log.e(TAG, e.message.toString())
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
             }
 
-        } catch (e: UserAlreadyExistsException) {
-            Log.e(TAG, e.message.toString())
-        } catch (e: Exception) {
-            Log.e(TAG, e.message.toString())
+            isLoading.value = false
+
+        } else {
+            //condition when is empty
         }
-
-
-
-
-        isLoading.value = false
-
     }
 }

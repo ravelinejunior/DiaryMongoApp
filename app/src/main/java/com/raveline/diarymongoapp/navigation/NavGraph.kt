@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -93,7 +94,15 @@ fun SetupNavGraph(
             },
             navigateToAuth = {
                 navController.popBackStack()
-                navController.navigate(Screens.Authentication.route)
+                navController.navigate(
+                    route = Screens.Authentication.route,
+                    navOptions = NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setPopUpTo(
+                            Screens.Home.route, inclusive = true
+                        ).build()
+                )
+
             },
             navigateToWriteWithArgs = { diaryId ->
                 try {
@@ -307,7 +316,21 @@ fun NavGraphBuilder.writeRoute(
                 writeViewModel.setDescription(description = it)
             },
             onDeleteClicked = { },
-            onBackPressed = onBackPressed
+            onBackPressed = onBackPressed,
+            onSaveClicked = { diary ->
+                diary?.apply {
+                    //Setting the selected mood saved on viewmodel
+                    mood = Mood.values()[pageNumber].name
+                }?.let { finalDiary ->
+                    writeViewModel.insertDiary(
+                        diaryModel = finalDiary,
+                        onSuccess = {
+                            onBackPressed()
+                        },
+                        onError = {}
+                    )
+                }
+            }
         )
     }
 }

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.login.CurvedShape
@@ -248,9 +249,11 @@ fun SignUpScreen(
 
                 // Is loading
                 if (viewModel.isLoading.value) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center),
                             color = MaterialTheme.colorScheme.onSurface,
@@ -288,7 +291,14 @@ fun SignUpScreen(
 
                 // Validate user and go to home Screen
                 if (viewModel.userSignedUp.value) {
-                    navController.navigate(Screens.Home.route)
+                    navController.popBackStack()
+                    navController.navigate(
+                        route = Screens.Home.route,
+                        navOptions = NavOptions.Builder()
+                            .setPopUpTo(
+                                Screens.SignUp.route, inclusive = true
+                            ).build()
+                    )
                 }
             }
         }
