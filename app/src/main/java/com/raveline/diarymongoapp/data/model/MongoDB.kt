@@ -83,20 +83,30 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override fun getSelectedDiary(diaryId: ObjectId): RequestState<DiaryModel> {
+    override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<DiaryModel>> {
         return if (user != null) {
             try {
-                val diary = realm.query<DiaryModel>(query = "_id == $0", diaryId).find().first()
-                RequestState.Success(data = diary)
+                realm.query<DiaryModel>(query = "_id == $0", diaryId).asFlow().map {
+                    RequestState.Success(data = it.list.first())
+                }
+
             } catch (e: Exception) {
-                RequestState.Error(e)
+                flow {
+                    emit(
+                        RequestState.Error(e)
+                    )
+                }
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            flow {
+                emit(
+                    RequestState.Error(UserNotAuthenticatedException())
+                )
+            }
         }
     }
 
-    override suspend fun addNewDiary(diaryModel: DiaryModel): RequestState<DiaryModel> {
+    override suspend fun insertDiary(diaryModel: DiaryModel): RequestState<DiaryModel> {
         return if (user != null) {
             try {
                 val addedDiary = realm.write {
@@ -113,6 +123,35 @@ object MongoDB : MongoRepository {
             }
         } else {
             RequestState.Error(UserNotAuthenticatedException("Wasn't possible to add this new diary"))
+        }
+    }
+
+    override suspend fun updateDiary(diaryModel: DiaryModel): RequestState<DiaryModel> {
+        return if (user != null) {
+            try {
+                realm.write {
+                    val queriedDiary = query<DiaryModel>(
+                        query = "_id == $0", diaryModel._id
+                    ).first().find()
+
+                    if (queriedDiary != null) {
+                        queriedDiary.title = diaryModel.title
+                        queriedDiary.description = diaryModel.description
+                        queriedDiary.images = diaryModel.images
+                        queriedDiary.mood = diaryModel.mood
+                        queriedDiary.date = diaryModel.date
+
+                        RequestState.Success(data = queriedDiary)
+                    } else {
+                        RequestState.Error(error = Exception("Diary doesn't exists"))
+                    }
+                }
+
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException("Wasn't possible to update this diary"))
         }
     }
 }

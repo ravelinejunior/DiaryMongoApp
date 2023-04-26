@@ -11,7 +11,6 @@ import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -42,17 +41,17 @@ class WriteViewModel(
 
     private fun fetchSelectedDiary() = viewModelScope.launch {
         if (uiState.selectedDiaryId != null) {
-            val diary = MongoDB.getSelectedDiary(
+            MongoDB.getSelectedDiary(
                 diaryId = ObjectId(uiState.selectedDiaryId!!)
-            )
-
-            if (diary is RequestState.Success) {
-                val data = diary.data
-                withContext(Dispatchers.Main) {
-                    setSelectedDiary(diaryModel = data)
-                    setTitle(title = data.title)
-                    setDescription(description = data.description)
-                    setMood(Mood.valueOf(data.mood))
+            ).collect {
+                if (it is RequestState.Success) {
+                    val data = it.data
+                    withContext(Main) {
+                        setSelectedDiary(diaryModel = data)
+                        setTitle(title = data.title)
+                        setDescription(description = data.description)
+                        setMood(Mood.valueOf(data.mood))
+                    }
                 }
             }
         }
@@ -80,14 +79,37 @@ class WriteViewModel(
         uiState = uiState.copy(selectedDiary = diaryModel)
     }
 
+    fun upsertDiary(
+        diaryModel: DiaryModel,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = viewModelScope.launch(IO) {
+        if (uiState.selectedDiaryId != null) {
+            updateSelectedDiary(
+                diaryModel = diaryModel.apply {
+                    // Get the id of the selected diary
+                    _id = ObjectId(uiState.selectedDiaryId.toString())
+                    date = uiState.selectedDiary!!.date
+                },
+                onSuccess = onSuccess,
+                onError = onError
+            )
+        } else {
+            insertDiary(
+                diaryModel = diaryModel,
+                onSuccess = onSuccess,
+                onError = onError
+            )
+        }
+    }
 
-    fun insertDiary(
+    private fun insertDiary(
         diaryModel: DiaryModel,
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) = viewModelScope.launch(IO) {
 
-        when (val result = MongoDB.addNewDiary(diaryModel)) {
+        when (val result = MongoDB.insertDiary(diaryModel)) {
             is RequestState.Success -> {
                 withContext(Main) {
                     onSuccess()
@@ -107,6 +129,33 @@ class WriteViewModel(
             }
         }
 
+    }
+
+
+    private fun updateSelectedDiary(
+        diaryModel: DiaryModel,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = viewModelScope.launch(IO) {
+        when (val result = MongoDB.updateDiary(diaryModel)) {
+            is RequestState.Success -> {
+                withContext(Main) {
+                    onSuccess()
+                }
+            }
+
+            is RequestState.Error -> {
+                withContext(Main) {
+                    onError(result.error.message.toString())
+                }
+            }
+
+            else -> {
+                withContext(Main) {
+                    onError("Something went wrong. Try again.")
+                }
+            }
+        }
     }
 
 }

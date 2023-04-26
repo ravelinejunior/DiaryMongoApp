@@ -322,7 +322,7 @@ fun NavGraphBuilder.writeRoute(
                     //Setting the selected mood saved on viewmodel
                     mood = Mood.values()[pageNumber].name
                 }?.let { finalDiary ->
-                    writeViewModel.insertDiary(
+                    writeViewModel.upsertDiary(
                         diaryModel = finalDiary,
                         onSuccess = {
                             onBackPressed()
