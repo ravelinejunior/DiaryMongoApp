@@ -60,8 +60,12 @@ class WriteViewModel(
         }
     }
 
-    fun updateDateTime(zonedDateTime: ZonedDateTime) {
-        uiState = uiState.copy(updatedDateTime = zonedDateTime.toInstant().toRealmInstant())
+    fun updateDateTime(zonedDateTime: ZonedDateTime?) {
+        uiState = if(zonedDateTime != null){
+            uiState.copy(updatedDateTime = zonedDateTime.toInstant()?.toRealmInstant())
+        }else{
+            uiState.copy(updatedDateTime = null)
+        }
     }
 
     fun setTitle(title: String) {

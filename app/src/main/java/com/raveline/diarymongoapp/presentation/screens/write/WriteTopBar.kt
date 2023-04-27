@@ -49,7 +49,7 @@ import java.util.Locale
 fun WriteTopBar(
     selectedDiary: DiaryModel?,
     moodName: () -> String,
-    onDateTimeUpdated: (ZonedDateTime) -> Unit,
+    onDateTimeUpdated: (ZonedDateTime?) -> Unit,
     onDeleteClicked: () -> Unit,
     onBackPressed: () -> Unit
 ) {
@@ -80,7 +80,7 @@ fun WriteTopBar(
     val selectedDiaryDateTime = remember(selectedDiary) {
         if (selectedDiary != null) {
             SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
-                .format(Date.from(selectedDiary?.date?.toInstant()))
+                .format(Date.from(selectedDiary.date.toInstant()))
         } else {
             "Unknown"
         }
@@ -133,6 +133,7 @@ fun WriteTopBar(
                         currentDate = LocalDate.now()
                         currentTime = LocalTime.now()
                         dateTimeUpdated = false
+                        onDateTimeUpdated(null)
                     }
                 ) {
                     Icon(

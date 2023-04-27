@@ -23,7 +23,7 @@ fun WriteScreen(
     onDeleteClicked: () -> Unit,
     onBackPressed: () -> Unit,
     onSaveClicked: (DiaryModel?) -> Unit,
-    onDateTimeUpdated: (ZonedDateTime) -> Unit,
+    onDateTimeUpdated: (ZonedDateTime?) -> Unit,
 ) {
 
     // Update the mood when selecting a diary
