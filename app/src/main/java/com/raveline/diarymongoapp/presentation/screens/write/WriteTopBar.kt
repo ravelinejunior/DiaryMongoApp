@@ -133,7 +133,13 @@ fun WriteTopBar(
                         currentDate = LocalDate.now()
                         currentTime = LocalTime.now()
                         dateTimeUpdated = false
-                        onDateTimeUpdated(null)
+                        onDateTimeUpdated(
+                            ZonedDateTime.of(
+                                currentDate,
+                                currentTime,
+                                ZoneId.systemDefault()
+                            )
+                        )
                     }
                 ) {
                     Icon(
@@ -178,7 +184,7 @@ fun WriteTopBar(
     ClockDialog(
         state = timeDialog,
         selection = ClockSelection.HoursMinutes { hours: Int, minutes: Int ->
-            currentTime = LocalTime.of(hours,minutes)
+            currentTime = LocalTime.of(hours, minutes)
             dateTimeUpdated = true
             onDateTimeUpdated(
                 ZonedDateTime.of(
