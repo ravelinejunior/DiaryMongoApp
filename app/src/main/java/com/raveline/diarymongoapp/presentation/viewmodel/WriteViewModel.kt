@@ -15,6 +15,7 @@ import com.raveline.diarymongoapp.data.model.Mood
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
@@ -46,7 +47,9 @@ class WriteViewModel(
         if (uiState.selectedDiaryId != null) {
             MongoDB.getSelectedDiary(
                 diaryId = ObjectId(uiState.selectedDiaryId!!)
-            ).collect {
+            ).catch {
+                emit(RequestState.Error(Exception("Diary is already deleted.")))
+            }.collect {
                 if (it is RequestState.Success) {
                     val data = it.data
                     withContext(Main) {
@@ -61,9 +64,9 @@ class WriteViewModel(
     }
 
     fun updateDateTime(zonedDateTime: ZonedDateTime?) {
-        uiState = if(zonedDateTime != null){
+        uiState = if (zonedDateTime != null) {
             uiState.copy(updatedDateTime = zonedDateTime.toInstant()?.toRealmInstant())
-        }else{
+        } else {
             uiState.copy(updatedDateTime = null)
         }
     }
@@ -123,7 +126,9 @@ class WriteViewModel(
         when (val result = MongoDB.insertDiary(
             diaryModel = diaryModel.apply {
                 // verify if user selected the date
-                date = uiState.selectedDiary!!.date
+                if(uiState.updatedDateTime != null){
+                    date = uiState.selectedDiary!!.date
+                }
             }
         )
         ) {
@@ -148,6 +153,36 @@ class WriteViewModel(
 
     }
 
+    fun deleteDiary(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = viewModelScope.launch(IO) {
+        if (uiState.selectedDiaryId != null) {
+            when (val result =
+                MongoDB.deleteDiary(id = ObjectId(uiState.selectedDiaryId.toString()))
+            ) {
+
+                is RequestState.Success -> {
+                    withContext(Main) {
+                        onSuccess()
+                    }
+                }
+
+                is RequestState.Error -> {
+                    withContext(Main) {
+                        onError(result.error.message.toString())
+                    }
+                }
+
+                else -> {
+                    withContext(Main) {
+                        onError("Something went wrong. Try again.")
+                    }
+                }
+
+            }
+        }
+    }
 
     private fun updateSelectedDiary(
         diaryModel: DiaryModel,
@@ -156,13 +191,13 @@ class WriteViewModel(
     ) = viewModelScope.launch(IO) {
         when (val result = MongoDB.updateDiary(
             diaryModel = diaryModel.apply {
-            // verify if user selected the date
-            date = if (uiState.updatedDateTime != null) {
-                uiState.updatedDateTime!!
-            } else {
-                uiState.selectedDiary!!.date
-            }
-        })) {
+                // verify if user selected the date
+                date = if (uiState.updatedDateTime != null) {
+                    uiState.updatedDateTime!!
+                } else {
+                    uiState.selectedDiary!!.date
+                }
+            })) {
             is RequestState.Success -> {
                 withContext(Main) {
                     onSuccess()

@@ -1,10 +1,17 @@
 package com.raveline.diarymongoapp.navigation
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph
@@ -292,6 +299,7 @@ fun NavGraphBuilder.writeRoute(
             })
     ) {
 
+        val context = LocalContext.current
         val writeViewModel: WriteViewModel = viewModel()
         val uiState = writeViewModel.uiState
         val pagerState = rememberPagerState()
@@ -315,7 +323,28 @@ fun NavGraphBuilder.writeRoute(
             onDescriptionChanged = {
                 writeViewModel.setDescription(description = it)
             },
-            onDeleteClicked = { },
+            onDeleteClicked = {
+                writeViewModel.deleteDiary(
+                    onSuccess = {
+
+                        onBackPressed()
+
+                        Toast.makeText(
+                            context,
+                            "${uiState.title} deleted.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onError = {
+                        Toast.makeText(
+                            context,
+                            it,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                )
+            },
             onBackPressed = onBackPressed,
             onSaveClicked = { diary ->
                 diary?.apply {
@@ -328,7 +357,7 @@ fun NavGraphBuilder.writeRoute(
                             onBackPressed()
                         },
                         onError = {
-                            Log.e(TAG, "writeRoute: $it", )
+                            Log.e(TAG, "writeRoute: $it")
                         }
                     )
                 }
@@ -337,5 +366,36 @@ fun NavGraphBuilder.writeRoute(
                 writeViewModel.updateDateTime(zonedDateTime = it)
             }
         )
+    }
+}
+
+@Composable
+fun CustomSnackBar(
+    message: String,
+    action: (() -> Unit)? = null
+) {
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    SnackbarHost(
+        hostState = snackBarHostState,
+        snackbar = {
+            Snackbar(
+                action = {
+                    action?.let { onClick ->
+                        TextButton(onClick = onClick) {
+                            Text("Dismiss")
+                        }
+                    }
+                }
+            ) {
+                Text(text = message)
+            }
+        }
+    )
+
+    if (message.isNotEmpty()) {
+        LaunchedEffect(true) {
+            snackBarHostState.showSnackbar(message)
+        }
     }
 }

@@ -126,6 +126,35 @@ object MongoDB : MongoRepository {
         }
     }
 
+    override suspend fun deleteDiary(id: ObjectId): RequestState<DiaryModel> {
+        return if (user != null) {
+
+            realm.write {
+
+                val diary = query<DiaryModel>(
+                    query = "_id == $0 AND ownerId == $1", id, user.id
+                ).first().find()
+
+                if (diary != null) {
+                    try {
+
+                        delete(diary)
+                        RequestState.Success(data = diary)
+
+                    } catch (e: Exception) {
+                        RequestState.Error(e)
+                    }
+                } else {
+                    RequestState.Error(UserNotAuthenticatedException("Wasn't possible to update this diary. It doest exists."))
+                }
+
+            }
+
+        } else {
+            RequestState.Error(UserNotAuthenticatedException("Wasn't possible to update this diary"))
+        }
+    }
+
     override suspend fun updateDiary(diaryModel: DiaryModel): RequestState<DiaryModel> {
         return if (user != null) {
             try {
