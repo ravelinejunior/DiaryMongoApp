@@ -39,6 +39,7 @@ fun HomeContent(
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
+                .imePadding()
                 .navigationBarsPadding()
                 .padding(top = paddingValues.calculateTopPadding())
 
