@@ -25,4 +25,5 @@
     <string name="title_str">Title</string>
     <string name="description_str">Tell me about it.</string>
     <string name="save_str">Save</string>
+    <string name="add_icon_content_image">Add Icon</string>
 </resources>

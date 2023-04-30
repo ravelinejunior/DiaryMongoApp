@@ -27,7 +27,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
-import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.navigation.screens.Screens
