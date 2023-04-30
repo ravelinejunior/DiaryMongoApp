@@ -123,13 +123,15 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .border(1.dp, Color.Gray.copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Unspecified,
-                        disabledIndicatorColor = Color.Unspecified,
                         unfocusedIndicatorColor = Color.Unspecified,
+                        disabledIndicatorColor = Color.Unspecified,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                     ),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
@@ -158,13 +160,15 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .border(1.dp, Color.Gray.copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Unspecified,
-                        disabledIndicatorColor = Color.Unspecified,
                         unfocusedIndicatorColor = Color.Unspecified,
+                        disabledIndicatorColor = Color.Unspecified,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                     ),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
@@ -193,13 +197,15 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .border(1.dp, Color.Gray.copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Unspecified,
-                        disabledIndicatorColor = Color.Unspecified,
                         unfocusedIndicatorColor = Color.Unspecified,
+                        disabledIndicatorColor = Color.Unspecified,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                     ),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
@@ -228,13 +234,15 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
                         .border(1.dp, Color.Gray.copy(alpha = 0.25f), RoundedCornerShape(16.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Color.Transparent,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
                         focusedIndicatorColor = Color.Unspecified,
-                        disabledIndicatorColor = Color.Unspecified,
                         unfocusedIndicatorColor = Color.Unspecified,
+                        disabledIndicatorColor = Color.Unspecified,
                         focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                     ),
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done

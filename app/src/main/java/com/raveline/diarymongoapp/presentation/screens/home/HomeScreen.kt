@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.data.repository.Diaries
 
 @OptIn(ExperimentalMaterial3Api::class)

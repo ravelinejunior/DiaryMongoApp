@@ -2,7 +2,7 @@ package com.raveline.diarymongoapp.data.model
 
 import android.util.Log
 import com.raveline.diarymongoapp.common.utlis.Constants.MONGO_API_KEY
-import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.common.utlis.toInstant
 import com.raveline.diarymongoapp.data.repository.Diaries
 import com.raveline.diarymongoapp.data.repository.MongoRepository

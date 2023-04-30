@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raveline.diarymongoapp.ui.theme
 
 import android.app.Activity

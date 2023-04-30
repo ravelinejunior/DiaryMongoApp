@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
-import com.raveline.diarymongoapp.common.utlis.RequestState
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB

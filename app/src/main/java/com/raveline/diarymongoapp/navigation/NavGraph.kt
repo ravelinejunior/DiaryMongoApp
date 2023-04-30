@@ -27,9 +27,11 @@ import com.google.accompanist.pager.rememberPagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
-import com.raveline.diarymongoapp.common.utlis.RequestState
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.data.stateModel.GalleryImage
+import com.raveline.diarymongoapp.data.stateModel.RequestState
+import com.raveline.diarymongoapp.data.stateModel.rememberGalleryState
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
@@ -306,6 +308,7 @@ fun NavGraphBuilder.writeRoute(
         val pageNumber by remember {
             derivedStateOf { pagerState.currentPage }
         }
+        val galleryState = rememberGalleryState()
 
         LaunchedEffect(key1 = uiState) {
             Log.d(TAG, "Selected Diary Id: ${uiState.selectedDiaryId}")
@@ -314,6 +317,7 @@ fun NavGraphBuilder.writeRoute(
         WriteScreen(
             uiState = uiState,
             pagerState = pagerState,
+            galleryState = galleryState,
             moodName = {
                 Mood.values()[pageNumber].name
             },
@@ -364,6 +368,15 @@ fun NavGraphBuilder.writeRoute(
             },
             onDateTimeUpdated = {
                 writeViewModel.updateDateTime(zonedDateTime = it)
+            },
+            onImageSelect = { imageUri ->
+
+                val galleryImage = GalleryImage(
+                    image = imageUri,
+                    remoteImagePath = ""
+                )
+
+                galleryState.addImage(galleryImage = galleryImage)
             }
         )
     }

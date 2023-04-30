@@ -1,5 +1,6 @@
 package com.raveline.diarymongoapp.presentation.screens.write
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +45,8 @@ import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.data.stateModel.GalleryState
+import com.raveline.diarymongoapp.presentation.components.GalleryUploader
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import kotlinx.coroutines.launch
 
@@ -52,12 +55,14 @@ import kotlinx.coroutines.launch
 fun WriteContent(
     uiState: UiState,
     pagerState: PagerState,
+    galleryState: GalleryState,
     title: String,
     onTitleChanged: (String) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
-    onSaveClicked: (DiaryModel?) -> Unit
+    onSaveClicked: (DiaryModel?) -> Unit,
+    onImageSelect: (Uri) -> Unit
 ) {
 
     val scrollState = rememberScrollState()
@@ -112,13 +117,15 @@ fun WriteContent(
                 value = title,
                 onValueChange = onTitleChanged,
                 placeholder = { Text(text = stringResource(id = R.string.title_str)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Unspecified,
-                    disabledIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
+                    disabledIndicatorColor = Color.Unspecified,
                     focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                 ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
@@ -140,13 +147,15 @@ fun WriteContent(
                 value = description,
                 onValueChange = onDescriptionChanged,
                 placeholder = { Text(text = stringResource(id = R.string.description_str)) },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
                     focusedIndicatorColor = Color.Unspecified,
-                    disabledIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
+                    disabledIndicatorColor = Color.Unspecified,
                     focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                 ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
@@ -160,7 +169,19 @@ fun WriteContent(
         }
 
         Column(verticalArrangement = Arrangement.Bottom) {
+
             Spacer(modifier = Modifier.height(12.dp))
+
+            //set gallery composable function
+            GalleryUploader(
+                galleryState = galleryState,
+                onAddClicked = { /*TODO*/ },
+                onImageSelected = onImageSelect,
+                onImageClick = {}
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
