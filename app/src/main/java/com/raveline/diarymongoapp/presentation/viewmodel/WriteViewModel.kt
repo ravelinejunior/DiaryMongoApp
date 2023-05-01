@@ -7,17 +7,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
-import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 
 class WriteViewModel(
@@ -125,7 +126,7 @@ class WriteViewModel(
         when (val result = MongoDB.insertDiary(
             diaryModel = diaryModel.apply {
                 // verify if user selected the date
-                if(uiState.updatedDateTime != null){
+                if (uiState.updatedDateTime != null) {
                     date = uiState.selectedDiary!!.date
                 }
             }
