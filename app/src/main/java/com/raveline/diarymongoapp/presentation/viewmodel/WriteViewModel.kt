@@ -18,7 +18,6 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 
 class WriteViewModel(
