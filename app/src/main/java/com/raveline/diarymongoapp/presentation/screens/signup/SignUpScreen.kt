@@ -20,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -50,7 +49,6 @@ import com.raveline.diarymongoapp.presentation.screens.login.CurvedShape
 import com.raveline.diarymongoapp.presentation.viewmodel.SignUpViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SignUpScreen(
@@ -288,7 +286,7 @@ fun SignUpScreen(
 
                 // Navigate to login screen text
                 Text(
-                    text = "Don't have an account? Sign up",
+                    text = "Already have an account? Click here!",
                     style = TextStyle(
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurface
@@ -303,9 +301,8 @@ fun SignUpScreen(
 
                 // Validate user and go to home Screen
                 if (viewModel.userSignedUp.value) {
-                    navController.popBackStack()
                     navController.navigate(
-                        route = Screens.Home.route,
+                        route = Screens.HomeSplash.route,
                         navOptions = NavOptions.Builder()
                             .setPopUpTo(
                                 Screens.SignUp.route, inclusive = true

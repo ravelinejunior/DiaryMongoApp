@@ -175,7 +175,9 @@ fun WriteContent(
             //set gallery composable function
             GalleryUploader(
                 galleryState = galleryState,
-                onAddClicked = { /*TODO*/ },
+                onAddClicked = {
+                    focusManager.clearFocus(force = true)
+                },
                 onImageSelected = onImageSelect,
                 onImageClick = {}
             )

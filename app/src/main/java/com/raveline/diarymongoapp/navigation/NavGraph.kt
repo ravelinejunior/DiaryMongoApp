@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
+import com.google.firebase.auth.FirebaseAuth
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
@@ -79,7 +80,8 @@ fun SetupNavGraph(
             navController = navController,
             onNavigateToLogin = {
                 navController.navigate(Screens.Login.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
 
         loginRoute(
@@ -92,7 +94,8 @@ fun SetupNavGraph(
             onClick = {},
             onNavigateToSignUp = {
                 navController.navigate(Screens.SignUp.route)
-            }
+            },
+            onDataLoaded = onDataLoaded
         )
 
         homeSplashRoute(navController = navController)
@@ -160,7 +163,7 @@ fun NavGraphBuilder.authenticationRoute(
             },
             oneTapSignInState = oneTapState,
             messageBarState = messageBarState,
-            onTokenIdReceived = { tokenId ->
+            onSuccessfulFirebaseSignIn = { tokenId ->
 
                 //Authenticating user and verify if its all good.
                 authViewModel.signInWithMongoAtlas(
@@ -176,6 +179,10 @@ fun NavGraphBuilder.authenticationRoute(
                     }
                 )
             },
+            onFailureFirebaseSignIn = {
+                messageBarState.addError(Exception(it))
+                authViewModel.setLoading(loading = false)
+            },
             onDialogDismiss = { message ->
                 messageBarState.addError(Exception(message))
             },
@@ -190,9 +197,15 @@ fun NavGraphBuilder.loginRoute(
     onValueEmailChange: (String) -> Unit,
     onValuePasswordChange: (String) -> Unit,
     onClick: () -> Unit,
-    onNavigateToSignUp: () -> Unit
+    onNavigateToSignUp: () -> Unit,
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screens.Login.route) {
+
+        LaunchedEffect(key1 = Unit) {
+            onDataLoaded()
+        }
+
         LoginScreen(
             onValueEmailChange = onValueEmailChange,
             onValuePasswordChange = onValuePasswordChange,
@@ -204,9 +217,14 @@ fun NavGraphBuilder.loginRoute(
 
 fun NavGraphBuilder.signUpRoute(
     navController: NavHostController,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onDataLoaded: () -> Unit,
 ) {
     composable(route = Screens.SignUp.route) {
+
+        LaunchedEffect(key1 = Unit) {
+            onDataLoaded()
+        }
 
         SignUpScreen(
             navController = navController,
@@ -276,6 +294,7 @@ fun NavGraphBuilder.homeRoute(
             },
             onYesClicked = {
                 scope.launch(IO) {
+                    FirebaseAuth.getInstance().signOut()
                     App.create(Constants.MONGO_API_KEY).currentUser?.logOut()
                     withContext(Main) {
                         navigateToAuth()
@@ -382,33 +401,3 @@ fun NavGraphBuilder.writeRoute(
     }
 }
 
-@Composable
-fun CustomSnackBar(
-    message: String,
-    action: (() -> Unit)? = null
-) {
-    val snackBarHostState = remember { SnackbarHostState() }
-
-    SnackbarHost(
-        hostState = snackBarHostState,
-        snackbar = {
-            Snackbar(
-                action = {
-                    action?.let { onClick ->
-                        TextButton(onClick = onClick) {
-                            Text("Dismiss")
-                        }
-                    }
-                }
-            ) {
-                Text(text = message)
-            }
-        }
-    )
-
-    if (message.isNotEmpty()) {
-        LaunchedEffect(true) {
-            snackBarHostState.showSnackbar(message)
-        }
-    }
-}

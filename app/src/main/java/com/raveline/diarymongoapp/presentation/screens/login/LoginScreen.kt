@@ -189,7 +189,7 @@ fun LoginScreen(
 
                     // Navigate to signup screen text
                     Text(
-                        text = "Already have an account? Sign in",
+                        text = "Don't have an account? Sign up",
                         style = TextStyle(
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSurface

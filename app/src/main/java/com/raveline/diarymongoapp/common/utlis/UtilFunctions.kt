@@ -2,6 +2,14 @@ package com.raveline.diarymongoapp.common.utlis
 
 import android.net.Uri
 import android.util.Log
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
@@ -77,5 +85,36 @@ fun Instant.toRealmInstant(): RealmInstant {
         RealmInstant.from(sec, nano)
     } else {
         RealmInstant.from(sec + 1, -1_000_000 + nano)
+    }
+}
+
+@Composable
+fun CustomSnackBar(
+    message: String,
+    action: (() -> Unit)? = null
+) {
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    SnackbarHost(
+        hostState = snackBarHostState,
+        snackbar = {
+            Snackbar(
+                action = {
+                    action?.let { onClick ->
+                        TextButton(onClick = onClick) {
+                            Text("Dismiss")
+                        }
+                    }
+                }
+            ) {
+                Text(text = message)
+            }
+        }
+    )
+
+    if (message.isNotEmpty()) {
+        LaunchedEffect(true) {
+            snackBarHostState.showSnackbar(message)
+        }
     }
 }
