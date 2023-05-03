@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
@@ -142,6 +143,7 @@ class WriteViewModel(
         )
         ) {
             is RequestState.Success -> {
+                uploadImagesToFirebase()
                 withContext(Main) {
                     onSuccess()
                 }
@@ -208,6 +210,7 @@ class WriteViewModel(
                 }
             })) {
             is RequestState.Success -> {
+                uploadImagesToFirebase()
                 withContext(Main) {
                     onSuccess()
                 }
@@ -240,6 +243,14 @@ class WriteViewModel(
         )
 
         galleryState.addImage(galleryImage = galleryImage)
+    }
+
+    private fun uploadImagesToFirebase() {
+        val storage = FirebaseStorage.getInstance().reference
+        galleryState.images.forEach { galleryImage ->
+            val imagePath = storage.child(galleryImage.remoteImagePath)
+            imagePath.putFile(galleryImage.image)
+        }
     }
 
 }

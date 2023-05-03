@@ -48,6 +48,7 @@ import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.data.stateModel.GalleryState
 import com.raveline.diarymongoapp.presentation.components.GalleryUploader
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
+import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
@@ -199,6 +200,8 @@ fun WriteContent(
                             DiaryModel().apply {
                                 this.title = uiState.title
                                 this.description = uiState.description
+                                this.images =
+                                    galleryState.images.map { it.remoteImagePath }.toRealmList()
                             }
                         )
                     } else {
