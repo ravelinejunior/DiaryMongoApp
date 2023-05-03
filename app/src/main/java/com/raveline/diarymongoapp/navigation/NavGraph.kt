@@ -4,11 +4,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +27,6 @@ import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.data.stateModel.GalleryImage
 import com.raveline.diarymongoapp.data.stateModel.RequestState
-import com.raveline.diarymongoapp.data.stateModel.rememberGalleryState
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
@@ -327,7 +321,7 @@ fun NavGraphBuilder.writeRoute(
         val pageNumber by remember {
             derivedStateOf { pagerState.currentPage }
         }
-        val galleryState = rememberGalleryState()
+        val galleryState = writeViewModel.galleryState
 
         LaunchedEffect(key1 = uiState) {
             Log.d(TAG, "Selected Diary Id: ${uiState.selectedDiaryId}")
@@ -390,12 +384,12 @@ fun NavGraphBuilder.writeRoute(
             },
             onImageSelect = { imageUri ->
 
-                val galleryImage = GalleryImage(
-                    image = imageUri,
-                    remoteImagePath = ""
-                )
+                val type = context.contentResolver.getType(imageUri)?.split("/")?.last() ?: "jpeg"
 
-                galleryState.addImage(galleryImage = galleryImage)
+                Log.i(TAG, "OnImageSelect Called - Uri: $imageUri")
+
+                writeViewModel.addImage(imageUri, type)
+
             }
         )
     }

@@ -1,16 +1,21 @@
 package com.raveline.diarymongoapp.presentation.viewmodel
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.data.stateModel.GalleryImage
+import com.raveline.diarymongoapp.data.stateModel.GalleryState
 import com.raveline.diarymongoapp.data.stateModel.RequestState
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
@@ -24,6 +29,10 @@ import java.time.ZonedDateTime
 class WriteViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val TAG: String = WriteViewModel::class.java.simpleName
+
+    val galleryState = GalleryState()
 
     var uiState by mutableStateOf(UiState())
         private set
@@ -216,6 +225,21 @@ class WriteViewModel(
                 }
             }
         }
+    }
+
+    fun addImage(imageUri: Uri, imageType: String) {
+
+        val remoteImagePath = "images/${FirebaseAuth.getInstance().currentUser?.uid}/" +
+                "${imageUri.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+
+        Log.i(TAG, remoteImagePath)
+
+        val galleryImage = GalleryImage(
+            image = imageUri,
+            remoteImagePath = remoteImagePath
+        )
+
+        galleryState.addImage(galleryImage = galleryImage)
     }
 
 }
