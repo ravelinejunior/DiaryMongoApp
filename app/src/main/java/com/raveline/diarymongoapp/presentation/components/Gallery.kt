@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +46,7 @@ import kotlin.math.max
 @Composable
 fun Gallery(
     modifier: Modifier = Modifier,
-    images: List<String>,
+    images: List<Any>,
     imageSize: Dp = 40.dp,
     spaceBetween: Dp = 10.dp,
     imageShape: CornerBasedShape = Shapes().small
@@ -79,6 +78,7 @@ fun Gallery(
                         .data(image)
                         .crossfade(true)
                         .build(),
+                    contentScale = ContentScale.Crop,
                     contentDescription = stringResource(id = R.string.gallery_image_content_desc)
                 )
                 Spacer(modifier = Modifier.width(spaceBetween))
@@ -231,21 +231,6 @@ fun LastImageOverlay(
         )
     }
 
-}
-
-@Composable
-fun ShowGalleryButton(
-    galleryOpened: Boolean,
-    onClick: () -> Unit
-) {
-    TextButton(onClick = onClick) {
-        Text(
-            text = if (galleryOpened) stringResource(R.string.hide_gallery_str) else stringResource(
-                R.string.show_gallery_str
-            ),
-            style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize)
-        )
-    }
 }
 
 @Preview

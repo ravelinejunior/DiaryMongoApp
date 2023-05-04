@@ -10,10 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storageMetadata
-
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant
 
@@ -32,7 +29,7 @@ fun fetchImagesFromFirebase(
             if (remoteImagePath.trim().isNotEmpty()) {
                 FirebaseStorage.getInstance().reference.child(remoteImagePath.trim()).downloadUrl
                     .addOnSuccessListener {
-                        Log.d("DownloadURL", "$it")
+                        Log.i("DownloadURL", "$it")
                         onImageDownload(it)
                         if (remoteImagePaths.lastIndexOf(remoteImagePaths.last()) == index) {
                             onReadyToDisplay()

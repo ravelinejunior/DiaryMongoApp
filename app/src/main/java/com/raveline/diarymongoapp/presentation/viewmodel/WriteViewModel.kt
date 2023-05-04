@@ -9,8 +9,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
+import com.raveline.diarymongoapp.common.utlis.fetchImagesFromFirebase
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
@@ -67,10 +70,30 @@ class WriteViewModel(
                         setTitle(title = data.title)
                         setDescription(description = data.description)
                         setMood(Mood.valueOf(data.mood))
+
+                        fetchImagesFromFirebase(
+                            remoteImagePaths = data.images,
+                            onImageDownload = { downloadedImage ->
+                                galleryState.addImage(
+                                    galleryImage = GalleryImage(
+                                        image = downloadedImage,
+                                        remoteImagePath = extractRemoteImagePath(
+                                            remotePath = downloadedImage.toString()
+                                        )
+                                    )
+                                )
+                            }
+                        )
                     }
                 }
             }
         }
+    }
+
+    private fun extractRemoteImagePath(remotePath: String): String {
+        val chunks = remotePath.split("%2F")
+        val imageName = chunks[2].split("?").first()
+        return "images/${Firebase.auth.currentUser?.uid}/$imageName"
     }
 
     fun updateDateTime(zonedDateTime: ZonedDateTime?) {
