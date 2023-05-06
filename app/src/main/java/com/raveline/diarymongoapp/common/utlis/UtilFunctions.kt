@@ -10,7 +10,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storageMetadata
+import com.raveline.diarymongoapp.data.database.entity.ImageToUpload
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant
 
@@ -41,7 +44,6 @@ fun fetchImagesFromFirebase(
         }
     }
 }
-/*
 
 fun retryUploadingImageToFirebase(
     imageToUpload: ImageToUpload,
@@ -55,15 +57,14 @@ fun retryUploadingImageToFirebase(
     ).addOnSuccessListener { onSuccess() }
 }
 
-fun retryDeletingImageFromFirebase(
+/*fun retryDeletingImageFromFirebase(
     imageToDelete: ImageToDelete,
     onSuccess: () -> Unit
 ) {
     val storage = FirebaseStorage.getInstance().reference
     storage.child(imageToDelete.remoteImagePath).delete()
         .addOnSuccessListener { onSuccess() }
-}
-*/
+}*/
 
 fun RealmInstant.toInstant(): Instant {
     val sec: Long = this.epochSeconds

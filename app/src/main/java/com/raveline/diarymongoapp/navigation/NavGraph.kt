@@ -8,6 +8,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
@@ -25,7 +26,6 @@ import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diarymongoapp.data.stateModel.GalleryImage
 import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
@@ -315,7 +315,7 @@ fun NavGraphBuilder.writeRoute(
     ) {
 
         val context = LocalContext.current
-        val writeViewModel: WriteViewModel = viewModel()
+        val writeViewModel: WriteViewModel = hiltViewModel()
         val uiState = writeViewModel.uiState
         val pagerState = rememberPagerState()
         val pageNumber by remember {

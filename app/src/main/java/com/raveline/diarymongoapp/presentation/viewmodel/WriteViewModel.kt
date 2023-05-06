@@ -15,12 +15,15 @@ import com.google.firebase.storage.FirebaseStorage
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.fetchImagesFromFirebase
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
+import com.raveline.diarymongoapp.data.database.entity.ImageToUpload
+import com.raveline.diarymongoapp.data.database.repository.ImagesUploadDao
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
 import com.raveline.diarymongoapp.data.stateModel.GalleryImage
 import com.raveline.diarymongoapp.data.stateModel.GalleryState
 import com.raveline.diarymongoapp.data.stateModel.RequestState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -30,8 +33,11 @@ import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 
+
+@HiltViewModel
 class WriteViewModel(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val imagesUploadDao: ImagesUploadDao
 ) : ViewModel() {
 
     private val TAG: String = WriteViewModel::class.java.simpleName
@@ -273,6 +279,23 @@ class WriteViewModel(
         galleryState.images.forEach { galleryImage ->
             val imagePath = storage.child(galleryImage.remoteImagePath)
             imagePath.putFile(galleryImage.image)
+                .addOnProgressListener {
+                    val sessionUri = it.uploadSessionUri
+                    // Save image on database case something goes wrong
+                    if (sessionUri != null) {
+                        viewModelScope.launch(IO) {
+                            imagesUploadDao.insertImageToUpload(
+                                ImageToUpload(
+                                    imageUri = galleryImage.image.toString(),
+                                    remoteImagePath = galleryImage.remoteImagePath,
+                                    sessionUri = sessionUri.toString()
+                                )
+                            )
+                        }
+                    } else {
+
+                    }
+                }
         }
     }
 
