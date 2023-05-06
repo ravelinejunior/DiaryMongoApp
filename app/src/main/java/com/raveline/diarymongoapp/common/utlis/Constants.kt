@@ -7,6 +7,10 @@ object Constants {
     const val MONGO_SERVER_CLIENT_ID =
         "738821409973-omo4i05dqlukuiiaing162ef2kfmbk0a.apps.googleusercontent.com"
 
+    // Database
+    const val IMAGES_UPLOAD_TABLE = "IMAGES_UPLOAD_TABLE"
+    const val MONGO_LOCAL_DATABASE = "LOCAL_DATABASE"
+
     // Routes
     const val WRITE_SCREEN_ARGUMENT_ID = "diaryId"
     const val AUTHENTICATION_SCREEN = "authenticationScreen"
