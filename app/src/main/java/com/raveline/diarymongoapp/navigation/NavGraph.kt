@@ -390,6 +390,9 @@ fun NavGraphBuilder.writeRoute(
 
                 writeViewModel.addImage(imageUri, type)
 
+            },
+            onImageDeleteClick = {
+                galleryState.removeImage(it)
             }
         )
     }

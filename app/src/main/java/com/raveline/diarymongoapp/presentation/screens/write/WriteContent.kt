@@ -20,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
@@ -45,13 +44,14 @@ import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
+import com.raveline.diarymongoapp.data.stateModel.GalleryImage
 import com.raveline.diarymongoapp.data.stateModel.GalleryState
 import com.raveline.diarymongoapp.presentation.components.GalleryUploader
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun WriteContent(
     uiState: UiState,
@@ -63,7 +63,8 @@ fun WriteContent(
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
     onSaveClicked: (DiaryModel?) -> Unit,
-    onImageSelect: (Uri) -> Unit
+    onImageSelect: (Uri) -> Unit,
+    onImageClicked: (GalleryImage) -> Unit,
 ) {
 
     val scrollState = rememberScrollState()
@@ -180,7 +181,7 @@ fun WriteContent(
                     focusManager.clearFocus(force = true)
                 },
                 onImageSelected = onImageSelect,
-                onImageClick = {}
+                onImageClick = onImageClicked
             )
 
             Spacer(modifier = Modifier.height(12.dp))
