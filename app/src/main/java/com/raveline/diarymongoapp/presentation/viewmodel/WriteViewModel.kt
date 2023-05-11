@@ -138,6 +138,7 @@ class WriteViewModel @Inject constructor(
         onError: (String) -> Unit
     ) = viewModelScope.launch(IO) {
         if (uiState.selectedDiaryId != null) {
+
             updateSelectedDiary(
                 diaryModel = diaryModel.apply {
                     // Get the id of the selected diary
@@ -154,6 +155,8 @@ class WriteViewModel @Inject constructor(
                 onError = onError
             )
         }
+        //Verify if necessary
+        galleryState.clearDeletedImageList()
     }
 
     private fun insertDiary(
@@ -242,6 +245,7 @@ class WriteViewModel @Inject constructor(
             is RequestState.Success -> {
                 uploadImagesToFirebase()
                 withContext(Main) {
+                    deleteImageFromFirebase()
                     onSuccess()
                 }
             }
@@ -275,10 +279,21 @@ class WriteViewModel @Inject constructor(
         galleryState.addImage(galleryImage = galleryImage)
     }
 
-    private fun deleteImageFromFirebase(images: List<String>) {
+    private fun deleteImageFromFirebase(images: List<String>? = null) {
         val storage = FirebaseStorage.getInstance().reference
-        images.forEach { remotePath ->
-            storage.child(remotePath).delete()
+
+        if (images != null) {
+            images.forEach { remotePath ->
+                storage.child(remotePath).delete()
+            }
+        } else {
+            //Delete images selected
+            galleryState.imagesToBeDeleted.map {
+                it.remoteImagePath
+            }.forEach {
+                storage.child(it).delete()
+            }
+
         }
     }
 
