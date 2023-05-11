@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -64,7 +65,12 @@ private fun SplashScreen(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         delay(2500)
-        navController.navigate(Screens.Home.route)
+        navController.navigate(
+            Screens.Home.route, navOptions = NavOptions.Builder()
+                .setPopUpTo(
+                    Screens.SignUp.route, inclusive = false
+                ).build()
+        )
     }
 }
 

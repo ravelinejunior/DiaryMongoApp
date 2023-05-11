@@ -107,8 +107,7 @@ fun WriteScreen(
                         ZoomableImage(
                             selectedGalleryImage = selectedImageGallery!!,
                             onCloseClicked = {
-                                selectedImageGallery != null
-                                onBackPressed()
+                                selectedImageGallery = null
                             },
                             onDeleteClicked = {
                                 if (selectedImageGallery != null) {

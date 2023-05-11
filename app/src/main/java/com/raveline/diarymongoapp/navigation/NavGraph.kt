@@ -92,11 +92,16 @@ fun SetupNavGraph(
             onDataLoaded = onDataLoaded
         )
 
-        homeSplashRoute(navController = navController)
+        homeSplashRoute(navController = navController,)
 
         homeRoute(
             navigateToWrite = {
-                navController.navigate(Screens.Write.route)
+                navController.navigate(
+                    Screens.Write.route, navOptions = NavOptions.Builder()
+                        .setPopUpTo(
+                            Screens.SignUp.route, inclusive = false
+                        ).build()
+                )
             },
             navigateToAuth = {
                 navController.popBackStack()
@@ -343,9 +348,6 @@ fun NavGraphBuilder.writeRoute(
             onDeleteClicked = {
                 writeViewModel.deleteDiary(
                     onSuccess = {
-
-                        onBackPressed()
-
                         Toast.makeText(
                             context,
                             "${uiState.title} deleted.",

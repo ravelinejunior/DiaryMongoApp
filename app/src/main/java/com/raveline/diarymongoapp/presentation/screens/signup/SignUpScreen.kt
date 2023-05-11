@@ -302,11 +302,11 @@ fun SignUpScreen(
                 // Validate user and go to home Screen
                 if (viewModel.userSignedUp.value) {
                     navController.navigate(
-                        route = Screens.HomeSplash.route,
                         navOptions = NavOptions.Builder()
                             .setPopUpTo(
                                 Screens.SignUp.route, inclusive = true
-                            ).build()
+                            ).build(),
+                        route = Screens.HomeSplash.route
                     )
                 }
             }
