@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.data.database.ImagesDatabase
-import com.raveline.diarymongoapp.data.database.repository.ImagesUploadDao
+import com.raveline.diarymongoapp.data.database.dao.ImagesToDeleteDao
+import com.raveline.diarymongoapp.data.database.dao.ImagesUploadDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +33,9 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideImageUploadDao(database: ImagesDatabase): ImagesUploadDao = database.imageUploadDao()
+
+    @Provides
+    @Singleton
+    fun provideImageToDeleteDao(database: ImagesDatabase): ImagesToDeleteDao = database.imagesToDeleteDao()
 
 }

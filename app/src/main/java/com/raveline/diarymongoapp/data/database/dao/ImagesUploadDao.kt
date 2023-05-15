@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.data.database.repository
+package com.raveline.diarymongoapp.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

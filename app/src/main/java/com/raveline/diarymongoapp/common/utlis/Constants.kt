@@ -9,6 +9,7 @@ object Constants {
 
     // Database
     const val IMAGES_UPLOAD_TABLE = "IMAGES_UPLOAD_TABLE"
+    const val IMAGES_TO_DELETE_TABLE = "IMAGES_TO_DELETE_TABLE"
     const val MONGO_LOCAL_DATABASE = "LOCAL_DATABASE"
 
     // Routes

@@ -15,8 +15,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.common.utlis.fetchImagesFromFirebase
 import com.raveline.diarymongoapp.common.utlis.toRealmInstant
+import com.raveline.diarymongoapp.data.database.dao.ImagesToDeleteDao
+import com.raveline.diarymongoapp.data.database.dao.ImagesUploadDao
+import com.raveline.diarymongoapp.data.database.entity.ImageToDelete
 import com.raveline.diarymongoapp.data.database.entity.ImageToUpload
-import com.raveline.diarymongoapp.data.database.repository.ImagesUploadDao
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
@@ -37,7 +39,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WriteViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val imagesUploadDao: ImagesUploadDao
+    private val imagesUploadDao: ImagesUploadDao,
+    private val imagesToDeleteDao: ImagesToDeleteDao
 ) : ViewModel() {
 
     private val TAG: String = WriteViewModel::class.java.simpleName
@@ -155,8 +158,6 @@ class WriteViewModel @Inject constructor(
                 onError = onError
             )
         }
-        //Verify if necessary
-        galleryState.clearDeletedImageList()
     }
 
     private fun insertDiary(
@@ -284,14 +285,26 @@ class WriteViewModel @Inject constructor(
 
         if (images != null) {
             images.forEach { remotePath ->
-                storage.child(remotePath).delete()
+                storage.child(remotePath).delete().addOnFailureListener { exception ->
+                    viewModelScope.launch(IO) {
+                        imagesToDeleteDao.insertImageToDelete(
+                            ImageToDelete(remoteImagePath = remotePath)
+                        )
+                    }
+                }
             }
         } else {
             //Delete images selected
             galleryState.imagesToBeDeleted.map {
                 it.remoteImagePath
-            }.forEach {
-                storage.child(it).delete()
+            }.forEach { remotePath ->
+                storage.child(remotePath).delete().addOnFailureListener {
+                    viewModelScope.launch(IO) {
+                        imagesToDeleteDao.insertImageToDelete(
+                            ImageToDelete(remoteImagePath = remotePath)
+                        )
+                    }
+                }
             }
 
         }

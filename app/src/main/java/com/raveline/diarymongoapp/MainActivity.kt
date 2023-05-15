@@ -9,8 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.FirebaseApp
 import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diarymongoapp.common.utlis.retryDeletingImageFromFirebase
 import com.raveline.diarymongoapp.common.utlis.retryUploadingImageToFirebase
-import com.raveline.diarymongoapp.data.database.repository.ImagesUploadDao
+import com.raveline.diarymongoapp.data.database.dao.ImagesToDeleteDao
+import com.raveline.diarymongoapp.data.database.dao.ImagesUploadDao
 import com.raveline.diarymongoapp.navigation.SetupNavGraph
 import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.ui.theme.DiaryMongoAppTheme
@@ -26,6 +28,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var imagesUploadDao: ImagesUploadDao
+
+    @Inject
+    lateinit var imageToDeleteDao: ImagesToDeleteDao
 
     var keepSplashOpened = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +59,18 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        cleanupCheck(scope = lifecycleScope, imagesUploadDao = imagesUploadDao)
+        cleanupCheck(
+            scope = lifecycleScope,
+            imagesUploadDao = imagesUploadDao,
+            imagesToDeleteDao = imageToDeleteDao
+        )
     }
 }
 
 private fun cleanupCheck(
     scope: CoroutineScope,
-    imagesUploadDao: ImagesUploadDao
+    imagesUploadDao: ImagesUploadDao,
+    imagesToDeleteDao: ImagesToDeleteDao
 ) {
     scope.launch(IO) {
         val result = imagesUploadDao.getImages()
@@ -72,6 +82,18 @@ private fun cleanupCheck(
                         imagesUploadDao.deleteImage(
                             imageId = imageToUpload.id
                         )
+                    }
+                }
+            )
+        }
+
+        val otherResult = imagesToDeleteDao.getImagesToDelete()
+        otherResult.forEach { imageToDelete ->
+            retryDeletingImageFromFirebase(
+                imageToDelete = imageToDelete,
+                onSuccess = {
+                    scope.launch(IO) {
+                        imagesToDeleteDao.deleteImage(imageToDelete.id)
                     }
                 }
             )
