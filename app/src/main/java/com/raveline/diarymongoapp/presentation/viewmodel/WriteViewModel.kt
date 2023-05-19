@@ -328,8 +328,6 @@ class WriteViewModel @Inject constructor(
                                 )
                             )
                         }
-                    } else {
-
                     }
                 }
         }

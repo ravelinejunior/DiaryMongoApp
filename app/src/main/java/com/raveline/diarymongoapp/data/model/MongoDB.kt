@@ -2,10 +2,10 @@ package com.raveline.diarymongoapp.data.model
 
 import android.util.Log
 import com.raveline.diarymongoapp.common.utlis.Constants.MONGO_API_KEY
-import com.raveline.diarymongoapp.data.stateModel.RequestState
 import com.raveline.diarymongoapp.common.utlis.toInstant
 import com.raveline.diarymongoapp.data.repository.Diaries
 import com.raveline.diarymongoapp.data.repository.MongoRepository
+import com.raveline.diarymongoapp.data.stateModel.RequestState
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
@@ -174,6 +174,23 @@ object MongoDB : MongoRepository {
                     } else {
                         RequestState.Error(error = Exception("Diary doesn't exists"))
                     }
+                }
+
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException("Wasn't possible to update this diary"))
+        }
+    }
+
+    override suspend fun deleteAllDiaries(): RequestState<Boolean> {
+        return if (user != null) {
+            try {
+                realm.write {
+                    val diaries = this.query<DiaryModel>("ownerId == $0", user.id).find()
+                    delete(diaries)
+                    RequestState.Success(data = true)
                 }
 
             } catch (e: Exception) {

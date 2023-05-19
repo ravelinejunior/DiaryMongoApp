@@ -92,7 +92,7 @@ fun SetupNavGraph(
             onDataLoaded = onDataLoaded
         )
 
-        homeSplashRoute(navController = navController,)
+        homeSplashRoute(navController = navController)
 
         homeRoute(
             navigateToWrite = {
@@ -122,7 +122,10 @@ fun SetupNavGraph(
                     Log.e(TAG, "Navigation Error: ${e.message}")
                 }
             },
-            onDataLoaded = onDataLoaded
+            onDataLoaded = onDataLoaded,
+            onDeleteAllDiaries = {
+
+            }
         )
 
         writeRoute(
@@ -243,10 +246,11 @@ fun NavGraphBuilder.homeRoute(
     navigateToWriteWithArgs: (String) -> Unit,
     navigateToAuth: () -> Unit,
     onDataLoaded: () -> Unit,
+    onDeleteAllDiaries: () -> Unit,
 ) {
     composable(route = Screens.Home.route) {
 
-        val homeViewModel: HomeViewModel = viewModel()
+        val homeViewModel: HomeViewModel = hiltViewModel()
         val diaries by homeViewModel.diaries
 
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -254,7 +258,13 @@ fun NavGraphBuilder.homeRoute(
             mutableStateOf(false)
         }
 
+        var deleteAllDiariesDialogOpened by remember {
+            mutableStateOf(false)
+        }
+
         val scope = rememberCoroutineScope()
+
+        val context = LocalContext.current
 
         // dismiss splash screen
         LaunchedEffect(key1 = diaries) {
@@ -275,7 +285,10 @@ fun NavGraphBuilder.homeRoute(
                 signOutDialogOpened = true
             },
             navigateToWrite = navigateToWrite,
-            navigateToWriteWithArgs = navigateToWriteWithArgs
+            navigateToWriteWithArgs = navigateToWriteWithArgs,
+            onDeleteAllDiaries = {
+                deleteAllDiariesDialogOpened = true
+            },
         )
 
         // Launching and initializing mongo db sync
@@ -299,6 +312,32 @@ fun NavGraphBuilder.homeRoute(
                         navigateToAuth()
                     }
                 }
+            }
+        )
+
+        // Delete All Diaries
+        DisplayAlertDialog(
+            title = stringResource(id = R.string.delete_all_diaries),
+            message = stringResource(id = R.string.delete_all_diaries_message),
+            dialogOpened = deleteAllDiariesDialogOpened,
+            onDialogClosed = {
+                deleteAllDiariesDialogOpened = false
+            },
+            onYesClicked = {
+                homeViewModel.deleteAllDiaries(
+                    onSuccess = {
+                        Toast.makeText(context, "All Diaries Deleted", Toast.LENGTH_SHORT).show()
+                        scope.launch {
+                            drawerState.close()
+                        }
+                    },
+                    onFailure = {
+                        Toast.makeText(context, "Something went wrong. ${it.message}", Toast.LENGTH_SHORT).show()
+                        scope.launch {
+                            drawerState.close()
+                        }
+                    }
+                )
             }
         )
     }
