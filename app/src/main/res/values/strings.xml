@@ -29,4 +29,5 @@
     <string name="loading_str">Loading</string>
     <string name="delete_all_diaries">Delete All Diaries</string>
     <string name="delete_all_diaries_message">Are you sure you want to delete all your diaries?</string>
+    <string name="close_icon_str">Close Icon\n</string>
 </resources>

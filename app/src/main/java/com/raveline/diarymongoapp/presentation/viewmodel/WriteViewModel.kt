@@ -170,7 +170,7 @@ class WriteViewModel @Inject constructor(
             diaryModel = diaryModel.apply {
                 // verify if user selected the date
                 if (uiState.updatedDateTime != null) {
-                    date = uiState.selectedDiary!!.date
+                    date = uiState.updatedDateTime!!
                 }
             }
         )

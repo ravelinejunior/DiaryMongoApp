@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.data.repository.Diaries
 import com.raveline.diarymongoapp.data.stateModel.RequestState
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -29,7 +30,10 @@ fun HomeScreen(
     navigateToWriteWithArgs: (String) -> Unit,
     drawerState: DrawerState,
     onDeleteAllDiaries: () -> Unit,
-    onSignOutClicked: () -> Unit
+    onSignOutClicked: () -> Unit,
+    dateIsSelected: Boolean,
+    onDateSelected: (ZonedDateTime) -> Unit,
+    onDateReset: () -> Unit
 ) {
 
     // Control padding of fab to not cause overlap
@@ -49,7 +53,13 @@ fun HomeScreen(
                 scrollBehavior.nestedScrollConnection
             ),
             topBar = {
-                HomeTopBar(scrollBehavior = scrollBehavior, onMenuClicked = onMenuClicked)
+                HomeTopBar(
+                    scrollBehavior = scrollBehavior,
+                    onMenuClicked = onMenuClicked,
+                    dateIsSelected = dateIsSelected,
+                    onDateSelected = onDateSelected,
+                    onDateReset = onDateReset
+                )
             },
             content = {
 
@@ -141,18 +151,44 @@ fun NavigationDrawer(
                         Row(
                             modifier = Modifier.padding(horizontal = 12.dp)
                         ) {
-                            Image(
-                                imageVector = Icons.Default.Delete,
+                            Icon(
+                                painter = painterResource(id = R.drawable.google_logo),
                                 contentDescription = stringResource(
-                                    id = R.string.delete_all_diaries
-                                )
+                                    id = R.string.sign_out_str
+                                ),
+                                tint = MaterialTheme.colorScheme.onSurface
+
                             )
                             Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = stringResource(R.string.delete_all_diaries))
+                            Text(
+                                text = stringResource(R.string.sign_out_str),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                         }
                     },
                     selected = false,
                     onClick = onSignOutClicked,
+                )
+
+                NavigationDrawerItem(
+                    label = {
+                        Row(modifier = Modifier.padding(horizontal = 12.dp)) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(
+                                    id = R.string.delete_all_diaries
+                                ),
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = stringResource(R.string.delete_all_diaries),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    },
+                    selected = false,
+                    onClick = onDeleteAllDiaries
                 )
             }
         },

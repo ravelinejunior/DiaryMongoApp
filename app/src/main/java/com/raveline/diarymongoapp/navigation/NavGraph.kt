@@ -123,9 +123,6 @@ fun SetupNavGraph(
                 }
             },
             onDataLoaded = onDataLoaded,
-            onDeleteAllDiaries = {
-
-            }
         )
 
         writeRoute(
@@ -246,7 +243,6 @@ fun NavGraphBuilder.homeRoute(
     navigateToWriteWithArgs: (String) -> Unit,
     navigateToAuth: () -> Unit,
     onDataLoaded: () -> Unit,
-    onDeleteAllDiaries: () -> Unit,
 ) {
     composable(route = Screens.Home.route) {
 
@@ -289,7 +285,15 @@ fun NavGraphBuilder.homeRoute(
             onDeleteAllDiaries = {
                 deleteAllDiariesDialogOpened = true
             },
-        )
+            dateIsSelected = homeViewModel.dateIsSelected,
+            onDateSelected = {
+                homeViewModel.getDiaries(zonedDateTime = it)
+            },
+            onDateReset = {
+                homeViewModel.getDiaries()
+            },
+
+            )
 
         // Launching and initializing mongo db sync
         LaunchedEffect(key1 = Unit) {
@@ -332,7 +336,11 @@ fun NavGraphBuilder.homeRoute(
                         }
                     },
                     onFailure = {
-                        Toast.makeText(context, "Something went wrong. ${it.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Something went wrong. ${it.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         scope.launch {
                             drawerState.close()
                         }

@@ -18,8 +18,11 @@ import com.raveline.diarymongoapp.data.stateModel.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,21 +35,55 @@ class HomeViewModel @Inject constructor(
 
     var diaries: MutableState<Diaries> = mutableStateOf(RequestState.Idle)
 
+    var dateIsSelected by mutableStateOf(value = false)
+        private set
+
+    private lateinit var allDiariesJob: Job
+    private lateinit var filteredDiariesJob: Job
+
     init {
-        observeAllDiaries()
+        getDiaries()
+        viewModelScope.launch {
+            networkConnectivityObserver.observe().collect { network = it }
+        }
+    }
+
+    fun getDiaries(zonedDateTime: ZonedDateTime? = null) {
+        dateIsSelected = zonedDateTime != null
+        diaries.value = RequestState.Loading
+        if (dateIsSelected && zonedDateTime != null) {
+            observeFilteredDiaries(zonedDateTime = zonedDateTime)
+        } else {
+            observeAllDiaries()
+        }
     }
 
     private fun observeAllDiaries() {
-        viewModelScope.launch {
+        allDiariesJob = viewModelScope.launch {
+
+            if (::filteredDiariesJob.isInitialized) {
+                filteredDiariesJob.cancelAndJoin()
+            }
+
             MongoDB.getAllDiaries().collect { result ->
                 diaries.value = result
             }
         }
 
-        viewModelScope.launch {
-            networkConnectivityObserver.observe().collect { connectivityStatus ->
-                network = connectivityStatus
+    }
+
+    private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) {
+
+        filteredDiariesJob = viewModelScope.launch {
+
+            if (::allDiariesJob.isInitialized) {
+                allDiariesJob.cancelAndJoin()
             }
+
+            MongoDB.getFilteredDiaries(zonedDateTime = zonedDateTime)
+                .collect { result ->
+                    diaries.value = result
+                }
         }
     }
 
@@ -91,7 +128,7 @@ class HomeViewModel @Inject constructor(
             }.addOnFailureListener { exception ->
                 onFailure(exception)
             }
-        }else {
+        } else {
             onFailure(Exception("No Internet Connection!"))
         }
     }
