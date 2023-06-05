@@ -1,0 +1,1 @@
+/home/fh-junior/AndroidStudioProjects/DiaryMongoApp/buildSrc/build/classes/kotlin/main/ProjectConfig.class
