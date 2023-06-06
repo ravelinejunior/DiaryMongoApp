@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.data.stateModel
+package com.raveline.diary.ui.stateModel
 
 import android.net.Uri
 import androidx.compose.runtime.Composable

@@ -26,9 +26,9 @@ import com.raveline.diarymongoapp.common.utlis.Constants
 import com.raveline.diarymongoapp.common.utlis.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diarymongoapp.data.stateModel.RequestState
+import com.raveline.diary.ui.stateModel.RequestState
 import com.raveline.diarymongoapp.navigation.screens.Screens
-import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
+import com.raveline.diary.ui.components.DisplayAlertDialog
 import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.login.LoginScreen

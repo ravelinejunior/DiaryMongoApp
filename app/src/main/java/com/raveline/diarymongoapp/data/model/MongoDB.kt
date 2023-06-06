@@ -5,7 +5,7 @@ import com.raveline.diarymongoapp.common.utlis.Constants.MONGO_API_KEY
 import com.raveline.diarymongoapp.common.utlis.toInstant
 import com.raveline.diarymongoapp.data.repository.Diaries
 import com.raveline.diarymongoapp.data.repository.MongoRepository
-import com.raveline.diarymongoapp.data.stateModel.RequestState
+import com.raveline.diary.ui.stateModel.RequestState
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel

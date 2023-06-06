@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -23,7 +22,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.data.model.DiaryModel
-import com.raveline.diarymongoapp.presentation.components.DiaryHolder
+import com.raveline.diary.ui.components.DiaryHolder
 import java.time.LocalDate
 import java.util.*
 

@@ -14,7 +14,7 @@ import com.raveline.diarymongoapp.data.database.dao.ImagesToDeleteDao
 import com.raveline.diarymongoapp.data.database.entity.ImageToDelete
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.repository.Diaries
-import com.raveline.diarymongoapp.data.stateModel.RequestState
+import com.raveline.diary.ui.stateModel.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main

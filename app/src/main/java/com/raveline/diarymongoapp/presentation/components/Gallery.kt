@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.data.stateModel.GalleryImage
-import com.raveline.diarymongoapp.data.stateModel.GalleryState
+import com.raveline.diary.ui.stateModel.GalleryImage
+import com.raveline.diary.ui.stateModel.GalleryState
 import com.raveline.diarymongoapp.ui.theme.Elevation
 import kotlin.math.max
 

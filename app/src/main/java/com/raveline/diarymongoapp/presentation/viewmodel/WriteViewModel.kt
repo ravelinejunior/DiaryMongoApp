@@ -22,9 +22,9 @@ import com.raveline.diarymongoapp.data.database.entity.ImageToUpload
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.MongoDB
 import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diarymongoapp.data.stateModel.GalleryImage
-import com.raveline.diarymongoapp.data.stateModel.GalleryState
-import com.raveline.diarymongoapp.data.stateModel.RequestState
+import com.raveline.diary.ui.stateModel.GalleryImage
+import com.raveline.diary.ui.stateModel.GalleryState
+import com.raveline.diary.ui.stateModel.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers.IO
@@ -32,7 +32,6 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.mongodb.kbson.ObjectId
 import java.time.ZonedDateTime
 import javax.inject.Inject
 

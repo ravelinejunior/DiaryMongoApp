@@ -34,7 +34,7 @@ import com.maxkeppeler.sheets.clock.models.ClockSelection
 import com.raveline.diarymongoapp.R
 import com.raveline.diarymongoapp.common.utlis.toInstant
 import com.raveline.diarymongoapp.data.model.DiaryModel
-import com.raveline.diarymongoapp.presentation.components.DisplayAlertDialog
+import com.raveline.diary.ui.components.DisplayAlertDialog
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime

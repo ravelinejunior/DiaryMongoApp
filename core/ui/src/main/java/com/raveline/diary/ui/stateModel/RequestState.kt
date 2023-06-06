@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.data.stateModel
+package com.raveline.diary.ui.stateModel
 
 sealed class RequestState<out T> {
     object Idle : RequestState<Nothing>()

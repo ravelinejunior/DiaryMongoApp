@@ -37,8 +37,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diarymongoapp.data.stateModel.GalleryImage
-import com.raveline.diarymongoapp.data.stateModel.GalleryState
+import com.raveline.diary.ui.stateModel.GalleryImage
+import com.raveline.diary.ui.stateModel.GalleryState
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import java.time.ZonedDateTime
 
