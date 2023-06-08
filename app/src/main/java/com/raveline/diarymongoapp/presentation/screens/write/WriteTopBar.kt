@@ -1,5 +1,7 @@
 package com.raveline.diarymongoapp.presentation.screens.write
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
@@ -31,10 +33,10 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
-import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.common.utlis.toInstant
-import com.raveline.diarymongoapp.data.model.DiaryModel
 import com.raveline.diary.ui.components.DisplayAlertDialog
+import com.raveline.diary.util.model.DiaryModel
+import com.raveline.diary.util.toInstant
+import com.raveline.diarymongoapp.R
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -44,6 +46,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WriteTopBar(

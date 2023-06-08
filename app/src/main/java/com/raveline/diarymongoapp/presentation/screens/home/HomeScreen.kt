@@ -16,8 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.data.repository.Diaries
-import com.raveline.diary.ui.stateModel.RequestState
+import com.diary.data.repository.Diaries
+import com.diary.data.stateModel.RequestState
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)

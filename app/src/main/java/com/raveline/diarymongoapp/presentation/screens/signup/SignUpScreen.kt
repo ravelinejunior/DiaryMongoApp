@@ -44,7 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.navigation.screens.Screens
+import com.raveline.diary.util.screens.Screens
 import com.raveline.diarymongoapp.presentation.screens.login.CurvedShape
 import com.raveline.diarymongoapp.presentation.viewmodel.SignUpViewModel
 import kotlinx.coroutines.launch

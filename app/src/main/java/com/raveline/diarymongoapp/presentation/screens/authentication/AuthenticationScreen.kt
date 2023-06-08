@@ -13,7 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diary.util.Constants
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.onetap.OneTapSignInState

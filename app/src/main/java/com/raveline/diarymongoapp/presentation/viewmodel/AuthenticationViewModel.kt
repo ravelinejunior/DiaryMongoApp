@@ -3,7 +3,7 @@ package com.raveline.diarymongoapp.presentation.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raveline.diarymongoapp.common.utlis.Constants
+import com.raveline.diary.util.Constants
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers

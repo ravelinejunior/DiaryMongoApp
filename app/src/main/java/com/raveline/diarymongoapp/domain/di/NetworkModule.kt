@@ -1,7 +1,7 @@
 package com.raveline.diarymongoapp.domain.di
 
 import android.content.Context
-import com.raveline.diarymongoapp.connectivity.NetworkConnectivityObserver
+import com.raveline.diary.util.connectivity.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

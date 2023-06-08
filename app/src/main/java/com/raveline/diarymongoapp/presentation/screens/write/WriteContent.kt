@@ -41,12 +41,12 @@ import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
+import com.raveline.diary.ui.GalleryImage
+import com.raveline.diary.ui.GalleryState
+import com.raveline.diary.util.GalleryUploader
+import com.raveline.diary.util.model.DiaryModel
+import com.raveline.diary.util.model.Mood
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.data.model.DiaryModel
-import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diary.ui.stateModel.GalleryImage
-import com.raveline.diary.ui.stateModel.GalleryState
-import com.raveline.diary.ui.components.GalleryUploader
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch

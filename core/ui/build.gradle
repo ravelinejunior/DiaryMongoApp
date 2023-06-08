@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'io.realm.kotlin'
 }
 
 android {
@@ -38,9 +39,11 @@ android {
 }
 
 dependencies {
+
     implementation libs.activity.compose
     implementation libs.material3.compose
     implementation libs.compose.tooling.preview
-    implementation libs.coil
+    implementation libs.realm.sync
+    implementation libs.coroutines.core
 
 }

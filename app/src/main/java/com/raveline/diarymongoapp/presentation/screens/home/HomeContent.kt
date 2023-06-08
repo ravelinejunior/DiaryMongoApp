@@ -21,8 +21,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.data.model.DiaryModel
-import com.raveline.diary.ui.components.DiaryHolder
+import com.raveline.diary.util.model.DiaryModel
+import com.raveline.diary.util.DiaryHolder
 import java.time.LocalDate
 import java.util.*
 

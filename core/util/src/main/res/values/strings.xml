@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="icon_mood_content_description">Mood Content Description</string>
+    <string name="loading_str">"Loading ... "</string>
+    <string name="hide_gallery_str">Hide Gallery\n</string>
+    <string name="show_gallery_str">Show Gallery</string>
+</resources>

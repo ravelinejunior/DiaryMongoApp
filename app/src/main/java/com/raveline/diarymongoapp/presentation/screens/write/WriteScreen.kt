@@ -2,6 +2,8 @@ package com.raveline.diarymongoapp.presentation.screens.write
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -35,13 +37,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
-import com.raveline.diarymongoapp.data.model.DiaryModel
-import com.raveline.diarymongoapp.data.model.Mood
-import com.raveline.diary.ui.stateModel.GalleryImage
-import com.raveline.diary.ui.stateModel.GalleryState
+import com.raveline.diary.ui.GalleryImage
+import com.raveline.diary.ui.GalleryState
+import com.raveline.diary.util.model.DiaryModel
+import com.raveline.diary.util.model.Mood
 import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import java.time.ZonedDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPagerApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

@@ -3,18 +3,21 @@ package com.raveline.diarymongoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.diary.data.database.dao.ImagesToDeleteDao
+import com.diary.data.database.dao.ImagesUploadDao
+import com.diary.data.database.entity.ImageToDelete
+import com.diary.data.database.entity.ImageToUpload
 import com.google.firebase.FirebaseApp
-import com.raveline.diarymongoapp.common.utlis.Constants
-import com.raveline.diarymongoapp.common.utlis.retryDeletingImageFromFirebase
-import com.raveline.diarymongoapp.common.utlis.retryUploadingImageToFirebase
-import com.raveline.diarymongoapp.data.database.dao.ImagesToDeleteDao
-import com.raveline.diarymongoapp.data.database.dao.ImagesUploadDao
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storageMetadata
+import com.raveline.diary.util.Constants
+import com.raveline.diary.util.screens.Screens
 import com.raveline.diarymongoapp.navigation.SetupNavGraph
-import com.raveline.diarymongoapp.navigation.screens.Screens
 import com.raveline.diarymongoapp.ui.theme.DiaryMongoAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.kotlin.mongodb.App
@@ -105,5 +108,27 @@ private fun getStartDestination(): String {
     val user = App.create(Constants.MONGO_API_KEY).currentUser
     return if (user != null && user.loggedIn) Screens.HomeSplash.route
     else Screens.Authentication.route
+}
+
+
+fun retryUploadingImageToFirebase(
+    imageToUpload: ImageToUpload,
+    onSuccess: () -> Unit
+) {
+    val storage = FirebaseStorage.getInstance().reference
+    storage.child(imageToUpload.remoteImagePath).putFile(
+        imageToUpload.imageUri.toUri(),
+        storageMetadata { },
+        imageToUpload.sessionUri.toUri()
+    ).addOnSuccessListener { onSuccess() }
+}
+
+fun retryDeletingImageFromFirebase(
+    imageToDelete: ImageToDelete,
+    onSuccess: () -> Unit
+) {
+    val storage = FirebaseStorage.getInstance().reference
+    storage.child(imageToDelete.remoteImagePath).delete()
+        .addOnSuccessListener { onSuccess() }
 }
 

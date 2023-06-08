@@ -19,7 +19,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.navigation.screens.Screens
+import com.raveline.diary.util.screens.Screens
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

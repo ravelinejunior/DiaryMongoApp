@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.raveline.diarymongoapp.common.utlis.Constants.MONGO_API_KEY
+import com.raveline.diary.util.Constants.MONGO_API_KEY
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import io.realm.kotlin.mongodb.exceptions.UserAlreadyExistsException
