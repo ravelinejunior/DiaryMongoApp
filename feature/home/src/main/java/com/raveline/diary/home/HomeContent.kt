@@ -1,6 +1,8 @@
-package com.raveline.diarymongoapp.presentation.screens.home
+package com.raveline.diary.home
 
 import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,13 +22,13 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.raveline.diarymongoapp.R
-import com.raveline.diary.util.model.DiaryModel
 import com.raveline.diary.util.DiaryHolder
+import com.raveline.diary.util.model.DiaryModel
 import java.time.LocalDate
 import java.util.*
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
@@ -66,6 +68,7 @@ fun HomeContent(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateHeader(localDate: LocalDate) {
     Row(
@@ -121,7 +124,7 @@ fun EmptyPage(
     subtitle: String = "Write Something"
 ) {
 
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.read_book))
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(com.raveline.diary.ui.R.raw.read_book))
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -165,6 +168,7 @@ fun EmptyPage(
 }
 
 //@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_MASK)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateHeaderPreview() {
     DateHeader(localDate = LocalDate.now())

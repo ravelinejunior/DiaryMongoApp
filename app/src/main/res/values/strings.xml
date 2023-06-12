@@ -26,8 +26,4 @@
     <string name="description_str">Tell me about it.</string>
     <string name="save_str">Save</string>
     <string name="add_icon_content_image">Add Icon</string>
-    <string name="loading_str">Loading</string>
-    <string name="delete_all_diaries">Delete All Diaries</string>
-    <string name="delete_all_diaries_message">Are you sure you want to delete all your diaries?</string>
-    <string name="close_icon_str">Close Icon\n</string>
 </resources>

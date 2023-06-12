@@ -1,5 +1,7 @@
-package com.raveline.diarymongoapp.presentation.screens.home
+package com.raveline.diary.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
@@ -19,12 +21,12 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
-import com.raveline.diarymongoapp.R
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
@@ -46,7 +48,7 @@ fun HomeTopBar(
             IconButton(onClick = onMenuClicked) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.hamburger_menu_msg)
+                    contentDescription = stringResource(com.raveline.diary.ui.R.string.hamburger_menu_msg)
                 )
             }
         },
@@ -65,7 +67,7 @@ fun HomeTopBar(
                 IconButton(onClick = onDateReset) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.close_icon_str)
+                        contentDescription = stringResource(com.raveline.diary.ui.R.string.close_icon_str)
                     )
                 }
             } else {
@@ -74,7 +76,7 @@ fun HomeTopBar(
                 }) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = stringResource(R.string.date_icon_msg)
+                        contentDescription = stringResource(com.raveline.diary.ui.R.string.date_icon_msg)
                     )
                 }
             }
@@ -93,7 +95,12 @@ fun HomeTopBar(
                 )
             )
         },
-        config = CalendarConfig(monthSelection = true, yearSelection = true, minYear = 1900, maxYear = 3000)
+        config = CalendarConfig(
+            monthSelection = true,
+            yearSelection = true,
+            minYear = 1900,
+            maxYear = 3000
+        )
     )
 
 }

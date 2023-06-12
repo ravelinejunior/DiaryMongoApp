@@ -1,20 +1,22 @@
-package com.raveline.diarymongoapp.presentation.viewmodel
+package com.raveline.diary.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.diary.data.database.dao.ImagesToDeleteDao
+import com.diary.data.database.entity.ImageToDelete
+import com.diary.data.repository.Diaries
+import com.diary.data.repository.MongoDB
+import com.diary.data.stateModel.RequestState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.raveline.diary.util.connectivity.ConnectivityObserver
 import com.raveline.diary.util.connectivity.NetworkConnectivityObserver
-import com.diary.data.database.dao.ImagesToDeleteDao
-import com.diary.data.database.entity.ImageToDelete
-import com.diary.data.repository.MongoDB
-import com.diary.data.repository.Diaries
-import com.diary.data.stateModel.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -42,12 +44,15 @@ class HomeViewModel @Inject constructor(
     private lateinit var filteredDiariesJob: Job
 
     init {
-        getDiaries()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getDiaries()
+        }
         viewModelScope.launch {
             networkConnectivityObserver.observe().collect { network = it }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getDiaries(zonedDateTime: ZonedDateTime? = null) {
         dateIsSelected = zonedDateTime != null
         diaries.value = RequestState.Loading
@@ -58,6 +63,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeAllDiaries() {
         allDiariesJob = viewModelScope.launch {
 
@@ -72,6 +78,7 @@ class HomeViewModel @Inject constructor(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun observeFilteredDiaries(zonedDateTime: ZonedDateTime) {
 
         filteredDiariesJob = viewModelScope.launch {

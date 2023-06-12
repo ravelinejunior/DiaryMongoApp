@@ -1,6 +1,8 @@
-package com.raveline.diarymongoapp.presentation.screens.home
+package com.raveline.diary.home
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -15,11 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.raveline.diarymongoapp.R
 import com.diary.data.repository.Diaries
 import com.diary.data.stateModel.RequestState
 import java.time.ZonedDateTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -88,8 +90,8 @@ fun HomeScreen(
 
                     is RequestState.Error -> {
                         EmptyPage(
-                            title = stringResource(R.string.something_went_wrong_str),
-                            subtitle = stringResource(R.string.internet_connection_verify_str)
+                            title = stringResource(com.raveline.diary.ui.R.string.something_went_wrong_str),
+                            subtitle = stringResource(com.raveline.diary.ui.R.string.internet_connection_verify_str)
                         )
                     }
 
@@ -116,7 +118,7 @@ fun HomeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.new_diary_icon_content_msg)
+                        contentDescription = stringResource(com.raveline.diary.ui.R.string.new_diary_icon_content_msg)
                     )
                 }
             }
@@ -140,9 +142,9 @@ fun NavigationDrawer(
                         .width(160.dp)
                         .height(160.dp)
                         .align(Alignment.CenterHorizontally),
-                    painter = painterResource(id = R.drawable.logo),
+                    painter = painterResource(id = com.raveline.diary.ui.R.drawable.logo),
                     contentDescription = stringResource(
-                        id = R.string.google_logo_desc,
+                        id = com.raveline.diary.ui.R.string.google_logo_desc,
                     )
                 )
 
@@ -152,16 +154,16 @@ fun NavigationDrawer(
                             modifier = Modifier.padding(horizontal = 12.dp)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.google_logo),
+                                painter = painterResource(id = com.raveline.diary.ui.R.drawable.google_logo),
                                 contentDescription = stringResource(
-                                    id = R.string.sign_out_str
+                                    id = com.raveline.diary.ui.R.string.sign_out_str
                                 ),
                                 tint = MaterialTheme.colorScheme.onSurface
 
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = stringResource(R.string.sign_out_str),
+                                text = stringResource(com.raveline.diary.ui.R.string.sign_out_str),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         }
@@ -176,13 +178,13 @@ fun NavigationDrawer(
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = stringResource(
-                                    id = R.string.delete_all_diaries
+                                    id = com.raveline.diary.ui.R.string.delete_all_diaries
                                 ),
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = stringResource(R.string.delete_all_diaries),
+                                text = stringResource(com.raveline.diary.ui.R.string.delete_all_diaries),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                         }

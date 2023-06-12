@@ -61,7 +61,7 @@ fun AuthenticationContent(
                                 .clickable {
                                     onNavigateToLogin()
                                 },
-                            painter = painterResource(id = R.drawable.google_logo),
+                            painter = painterResource(id = com.raveline.diary.ui.R.drawable.google_logo),
                             contentDescription = stringResource(R.string.google_logo_desc)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
