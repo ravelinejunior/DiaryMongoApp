@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.screens.authentication
+package com.raveline.diary.auth
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -21,9 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.raveline.diarymongoapp.R
 import com.raveline.diary.ui.components.GoogleButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -92,10 +90,4 @@ fun AuthenticationContent(
         })
 
 
-}
-
-@Preview
-@Composable
-fun AuthenticationContentPreview() {
-    AuthenticationContent(loadingState = true, onButtonClicked = {}, {})
 }

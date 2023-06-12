@@ -1,1 +1,1 @@
-/home/fh-junior/AndroidStudioProjects/DiaryMongoApp/buildSrc/build/classes/kotlin/main/ProjectConfig.class
+C:\Users\junio\AndroidStudioProjects\DiaryMongoApp\buildSrc\build\classes\kotlin\main\ProjectConfig.class

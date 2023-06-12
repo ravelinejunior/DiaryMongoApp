@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.screens.authentication
+package com.raveline.diary.auth
 
 import android.annotation.SuppressLint
 import android.util.Log

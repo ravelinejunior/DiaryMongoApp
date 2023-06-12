@@ -1,15 +1,15 @@
 package com.raveline.diarymongoapp.navigation
 
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -18,28 +18,25 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.diary.data.repository.MongoDB
+import com.diary.data.stateModel.RequestState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.google.firebase.auth.FirebaseAuth
+import com.raveline.diary.auth.navigation.authenticationRoute
 import com.raveline.diary.ui.components.DisplayAlertDialog
-import com.diary.data.stateModel.RequestState
 import com.raveline.diary.util.Constants
 import com.raveline.diary.util.Constants.WRITE_SCREEN_ARGUMENT_ID
 import com.raveline.diary.util.model.Mood
 import com.raveline.diary.util.screens.Screens
 import com.raveline.diarymongoapp.R
-import com.diary.data.repository.MongoDB
-import com.raveline.diarymongoapp.presentation.screens.authentication.AuthenticationScreen
 import com.raveline.diarymongoapp.presentation.screens.home.HomeScreen
 import com.raveline.diarymongoapp.presentation.screens.login.LoginScreen
 import com.raveline.diarymongoapp.presentation.screens.signup.SignUpScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
 import com.raveline.diarymongoapp.presentation.screens.write.WriteScreen
-import com.raveline.diarymongoapp.presentation.viewmodel.AuthenticationViewModel
 import com.raveline.diarymongoapp.presentation.viewmodel.HomeViewModel
 import com.raveline.diarymongoapp.presentation.viewmodel.WriteViewModel
-import com.stevdzasan.messagebar.rememberMessageBarState
-import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -48,6 +45,7 @@ import kotlinx.coroutines.withContext
 
 val TAG: String = NavGraph::class.java.simpleName
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavGraph(
     startDestination: String,
@@ -134,63 +132,6 @@ fun SetupNavGraph(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-fun NavGraphBuilder.authenticationRoute(
-    navigateToHome: () -> Unit,
-    onDataLoaded: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-) {
-    composable(route = Screens.Authentication.route) {
-
-        val authViewModel = viewModel<AuthenticationViewModel>()
-        val loadingState by authViewModel.loadingState
-        val authenticated by authViewModel.authenticated
-
-        val oneTapState = rememberOneTapSignInState()
-        val messageBarState = rememberMessageBarState()
-
-        LaunchedEffect(key1 = Unit) {
-            onDataLoaded()
-        }
-
-        AuthenticationScreen(
-            authenticated = authenticated,
-            loadingState = loadingState,
-            onButtonClicked = {
-                oneTapState.open()
-                authViewModel.setLoading(loading = true)
-            },
-            oneTapSignInState = oneTapState,
-            messageBarState = messageBarState,
-            onSuccessfulFirebaseSignIn = { tokenId ->
-
-                //Authenticating user and verify if its all good.
-                authViewModel.signInWithMongoAtlas(
-                    tokenId = tokenId,
-                    onSuccess = {
-                        messageBarState.addSuccess("Successfully Authenticated!")
-                        authViewModel.setLoading(loading = false)
-
-                    },
-                    onError = { error ->
-                        messageBarState.addError(Exception(error))
-                        authViewModel.setLoading(loading = false)
-                    }
-                )
-            },
-            onFailureFirebaseSignIn = {
-                messageBarState.addError(Exception(it))
-                authViewModel.setLoading(loading = false)
-            },
-            onDialogDismiss = { message ->
-                messageBarState.addError(Exception(message))
-            },
-
-            navigateToHome = navigateToHome,
-            onNavigateToLogin = onNavigateToLogin
-        )
-    }
-}
 
 fun NavGraphBuilder.loginRoute(
     onValueEmailChange: (String) -> Unit,
@@ -351,6 +292,7 @@ fun NavGraphBuilder.homeRoute(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPagerApi::class)
 fun NavGraphBuilder.writeRoute(
     onBackPressed: () -> Unit

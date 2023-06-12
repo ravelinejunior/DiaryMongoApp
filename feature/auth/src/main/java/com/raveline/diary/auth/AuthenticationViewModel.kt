@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.viewmodel
+package com.raveline.diary.auth
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
