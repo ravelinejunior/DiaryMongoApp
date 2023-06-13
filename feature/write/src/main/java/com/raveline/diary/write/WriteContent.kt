@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.screens.write
+package com.raveline.diary.write
 
 import android.net.Uri
 import android.widget.Toast
@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
@@ -46,12 +47,10 @@ import com.raveline.diary.ui.GalleryState
 import com.raveline.diary.util.GalleryUploader
 import com.raveline.diary.util.model.DiaryModel
 import com.raveline.diary.util.model.Mood
-import com.raveline.diarymongoapp.R
-import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun WriteContent(
     uiState: UiState,
@@ -107,7 +106,7 @@ fun WriteContent(
                         .data(Mood.values()[page].icon)
                         .crossfade(true)
                         .build(),
-                    contentDescription = stringResource(R.string.mood_icon_content_description),
+                    contentDescription = stringResource(com.raveline.diary.ui.R.string.mood_icon_content_description),
                 )
             }
 
@@ -118,11 +117,8 @@ fun WriteContent(
                 modifier = Modifier.fillMaxWidth(),
                 value = title,
                 onValueChange = onTitleChanged,
-                placeholder = { Text(text = stringResource(id = R.string.title_str)) },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
+                placeholder = { Text(text = stringResource(id = com.raveline.diary.ui.R.string.title_str)) },
+                colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
                     disabledIndicatorColor = Color.Unspecified,
@@ -148,11 +144,8 @@ fun WriteContent(
                 modifier = Modifier.fillMaxWidth(),
                 value = description,
                 onValueChange = onDescriptionChanged,
-                placeholder = { Text(text = stringResource(id = R.string.description_str)) },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
+                placeholder = { Text(text = stringResource(id = com.raveline.diary.ui.R.string.description_str)) },
+                colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Unspecified,
                     unfocusedIndicatorColor = Color.Unspecified,
                     disabledIndicatorColor = Color.Unspecified,
@@ -215,7 +208,7 @@ fun WriteContent(
                 },
                 shape = Shapes().small
             ) {
-                Text(text = stringResource(R.string.save_str))
+                Text(text = stringResource(com.raveline.diary.ui.R.string.save_str))
             }
         }
     }

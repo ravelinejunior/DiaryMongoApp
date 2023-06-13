@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.screens.write
+package com.raveline.diary.write
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -36,7 +36,6 @@ import com.maxkeppeler.sheets.clock.models.ClockSelection
 import com.raveline.diary.ui.components.DisplayAlertDialog
 import com.raveline.diary.util.model.DiaryModel
 import com.raveline.diary.util.toInstant
-import com.raveline.diarymongoapp.R
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -98,7 +97,7 @@ fun WriteTopBar(
             IconButton(onClick = onBackPressed) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.back_arrow_icon_content_description)
+                    contentDescription = stringResource(com.raveline.diary.ui.R.string.back_arrow_icon_content_description)
                 )
             }
         },
@@ -147,7 +146,7 @@ fun WriteTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.date_icon_content_description),
+                        contentDescription = stringResource(com.raveline.diary.ui.R.string.date_icon_content_description),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
@@ -160,7 +159,7 @@ fun WriteTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = stringResource(R.string.date_icon_content_description),
+                        contentDescription = stringResource(com.raveline.diary.ui.R.string.date_icon_content_description),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
@@ -217,7 +216,8 @@ fun DeleteDiaryAction(
         DropdownMenuItem(
             text = {
                 Text(
-                    text = stringResource(R.string.delete_str), style = TextStyle(
+                    text = stringResource(com.raveline.diary.ui.R.string.delete_str),
+                    style = TextStyle(
                         fontSize = MaterialTheme.typography.titleMedium.fontSize,
                         fontWeight = FontWeight.Bold,
                     )
@@ -231,7 +231,7 @@ fun DeleteDiaryAction(
     }
 
     DisplayAlertDialog(
-        title = stringResource(R.string.delete_str),
+        title = stringResource(com.raveline.diary.ui.R.string.delete_str),
         message = "Are you sure you want to permanently delete this note '${selectedDiary?.title}'?",
         dialogOpened = openDialog,
         onDialogClosed = { openDialog = false },
@@ -241,7 +241,7 @@ fun DeleteDiaryAction(
     IconButton(onClick = { expanded = !expanded }) {
         Icon(
             imageVector = Icons.Default.MoreVert,
-            contentDescription = stringResource(R.string.overflow_menu_icon_content_description),
+            contentDescription = stringResource(com.raveline.diary.ui.R.string.overflow_menu_icon_content_description),
             tint = MaterialTheme.colorScheme.onSurface,
         )
     }

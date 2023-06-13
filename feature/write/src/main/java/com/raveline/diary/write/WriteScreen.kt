@@ -1,4 +1,4 @@
-package com.raveline.diarymongoapp.presentation.screens.write
+package com.raveline.diary.write
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -41,7 +41,6 @@ import com.raveline.diary.ui.GalleryImage
 import com.raveline.diary.ui.GalleryState
 import com.raveline.diary.util.model.DiaryModel
 import com.raveline.diary.util.model.Mood
-import com.raveline.diarymongoapp.presentation.viewmodel.UiState
 import java.time.ZonedDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)

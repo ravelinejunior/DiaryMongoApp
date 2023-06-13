@@ -1,7 +1,9 @@
-package com.raveline.diarymongoapp.presentation.viewmodel
+package com.raveline.diary.write
 
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -105,6 +107,7 @@ class WriteViewModel @Inject constructor(
         return "images/${Firebase.auth.currentUser?.uid}/$imageName"
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateDateTime(zonedDateTime: ZonedDateTime?) {
         uiState = if (zonedDateTime != null) {
             uiState.copy(updatedDateTime = zonedDateTime.toInstant()?.toRealmInstant())

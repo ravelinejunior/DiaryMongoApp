@@ -2,31 +2,21 @@ package com.raveline.diarymongoapp.navigation
 
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.rememberPagerState
 import com.raveline.diary.auth.navigation.authenticationRoute
 import com.raveline.diary.home.navigation.homeRoute
-import com.raveline.diary.util.Constants.WRITE_SCREEN_ARGUMENT_ID
-import com.raveline.diary.util.model.Mood
 import com.raveline.diary.util.screens.Screens
+import com.raveline.diary.write.navigation.writeRoute
 import com.raveline.diarymongoapp.presentation.screens.login.LoginScreen
 import com.raveline.diarymongoapp.presentation.screens.signup.SignUpScreen
 import com.raveline.diarymongoapp.presentation.screens.splash.HomeSplashScreen
-import com.raveline.diarymongoapp.presentation.screens.write.WriteScreen
-import com.raveline.diarymongoapp.presentation.viewmodel.WriteViewModel
 
 val TAG: String = NavGraph::class.java.simpleName
 
@@ -161,104 +151,6 @@ fun NavGraphBuilder.signUpRoute(
 fun NavGraphBuilder.homeSplashRoute(navController: NavHostController) {
     composable(route = Screens.HomeSplash.route) {
         HomeSplashScreen(navController = navController)
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalPagerApi::class)
-fun NavGraphBuilder.writeRoute(
-    onBackPressed: () -> Unit
-) {
-
-    composable(
-        route = Screens.Write.route,
-        arguments = listOf(
-            navArgument(name = WRITE_SCREEN_ARGUMENT_ID) {
-                type = NavType.StringType
-                nullable = true
-                defaultValue = null
-            })
-    ) {
-
-        val context = LocalContext.current
-        val writeViewModel: WriteViewModel = hiltViewModel()
-        val uiState = writeViewModel.uiState
-        val pagerState = rememberPagerState()
-        val pageNumber by remember {
-            derivedStateOf { pagerState.currentPage }
-        }
-        val galleryState = writeViewModel.galleryState
-
-        LaunchedEffect(key1 = uiState) {
-            Log.d(TAG, "Selected Diary Id: ${uiState.selectedDiaryId}")
-        }
-
-        WriteScreen(
-            uiState = uiState,
-            pagerState = pagerState,
-            galleryState = galleryState,
-            moodName = {
-                Mood.values()[pageNumber].name
-            },
-            onTitleChanged = {
-                writeViewModel.setTitle(title = it)
-            },
-            onDescriptionChanged = {
-                writeViewModel.setDescription(description = it)
-            },
-            onDeleteClicked = {
-                writeViewModel.deleteDiary(
-                    onSuccess = {
-                        Toast.makeText(
-                            context,
-                            "${uiState.title} deleted.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    onError = {
-                        Toast.makeText(
-                            context,
-                            it,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                )
-            },
-            onBackPressed = onBackPressed,
-            onSaveClicked = { diary ->
-                diary?.apply {
-                    //Setting the selected mood saved on viewModel
-                    mood = Mood.values()[pageNumber].name
-                }?.let { finalDiary ->
-                    writeViewModel.upsertDiary(
-                        diaryModel = finalDiary,
-                        onSuccess = {
-                            onBackPressed()
-                        },
-                        onError = {
-                            Log.e(TAG, "writeRoute: $it")
-                        }
-                    )
-                }
-            },
-            onDateTimeUpdated = {
-                writeViewModel.updateDateTime(zonedDateTime = it)
-            },
-            onImageSelect = { imageUri ->
-
-                val type = context.contentResolver.getType(imageUri)?.split("/")?.last() ?: "jpeg"
-
-                Log.i(TAG, "OnImageSelect Called - Uri: $imageUri")
-
-                writeViewModel.addImage(imageUri, type)
-
-            },
-            onImageDeleteClick = {
-                galleryState.removeImage(it)
-            }
-        )
     }
 }
 
