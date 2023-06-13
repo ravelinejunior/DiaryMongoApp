@@ -31,7 +31,7 @@ import java.util.*
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeContent(
+internal fun HomeContent(
     diaryNotes: Map<LocalDate, List<DiaryModel>>,
     onClick: (String) -> Unit,
     paddingValues: PaddingValues

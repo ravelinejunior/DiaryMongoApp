@@ -26,7 +26,7 @@ import com.raveline.diary.ui.components.GoogleButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AuthenticationContent(
+internal fun AuthenticationContent(
     loadingState: Boolean,
     onButtonClicked: () -> Unit,
     onNavigateToLogin: () -> Unit,

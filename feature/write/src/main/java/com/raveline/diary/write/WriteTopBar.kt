@@ -48,7 +48,7 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar(
+internal fun WriteTopBar(
     selectedDiary: DiaryModel?,
     moodName: () -> String,
     onDateTimeUpdated: (ZonedDateTime?) -> Unit,
